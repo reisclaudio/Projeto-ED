@@ -1,7 +1,6 @@
 #include "heapsort.h"
 
 void heapify(Dist vet[], int i, int heapSize){
-    printf("%d %d\n", i, heapSize);
     Dist aux;
     double distI, distLeft, distRight, distLowest;
     int left, right, lowest;
@@ -27,11 +26,9 @@ void heapify(Dist vet[], int i, int heapSize){
         lowest = right;
 
     if(lowest != i){
-        printf("Aqui!\n");
         aux = vet[lowest];
         vet[lowest] = vet[i];
         vet[i] = aux;
-        printf("eae\n");
         
         heapify(vet, lowest, heapSize);
     }

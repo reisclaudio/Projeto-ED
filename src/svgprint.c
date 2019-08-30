@@ -73,29 +73,28 @@ void svgprintPredio (Predio predio, FILE * arqSVG)
         double yPredio = ((getyQPredio (predio) + gethQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
 
         p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
-        svgprintrect (p, arqSVG);
     }
-    if ((getFacePredio (predio) == 'S') || (getFacePredio (predio) == 's')){
+    else if ((getFacePredio (predio) == 'S') || (getFacePredio (predio) == 's')){
         double xPredio = getxQPredio (predio) + getNumPredio (predio);
         double yPredio = getyQPredio (predio) + getMrgPredio (predio);
 
         p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
-        svgprintrect (p, arqSVG);    
     }
-    if ((getFacePredio (predio) == 'L') || (getFacePredio (predio) == 'l')){
+    else if ((getFacePredio (predio) == 'L') || (getFacePredio (predio) == 'l')){
         double xPredio = getxQPredio (predio) + getMrgPredio (predio);
         double yPredio = getyQPredio (predio) + getNumPredio (predio);
 
         p = criaForma (" ", 'p', xPredio, yPredio, 0, getPPredio (predio), getFPredio (predio), "black", "white", "1");
-        svgprintrect (p, arqSVG);    
     }
-    if ((getFacePredio (predio) == 'O') || (getFacePredio (predio) == 'o')){
+    else if ((getFacePredio (predio) == 'O') || (getFacePredio (predio) == 'o')){
         double xPredio = ((getxQPredio (predio) + getwQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
         double yPredio = getyQPredio (predio) + getNumPredio (predio);
 
         p = criaForma (" ", 'p', xPredio, yPredio, 0, getPPredio (predio), getFPredio (predio), "black", "white", "1");
-        svgprintrect (p, arqSVG);    
     }
+    svgprintrect (p, arqSVG);
+    free (p); 
+
 }
 
 void svgprintMuro (Muro muro, FILE * arqSVG)

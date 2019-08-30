@@ -425,7 +425,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
 {
     double dist;
     Semaforo semaforo;
-    Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "red", "red", "1");
+    Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "orange", "red", "3");
     inserirElemento (lextra, foco);
 
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
@@ -462,16 +462,60 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
             j++;
         }
     }
+
+    for (int i = 0; i < getTamAtual (lsemaforos); i++){
+        free (distSemaforos[i]);
+    }
+    free (distSemaforos);
 }
 
-void consultaFS (int k, char* cep, char face, double num, Lista lquadras, FILE * arqSVG, FILE * arqTXT)
+void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista lsemaforos, Lista lextra, FILE * arqSVG, FILE * arqTXT)
 {
     double x, y;
     Quadra quadra = encontrarElemento (lquadras, cep);
 
     if ((face == 'N') || (face == 'n')){  
         x = getXQuadra (quadra) + num;
+        y = getYQuadra (quadra) + getHQuadra (quadra);
     }
+    else if ((face == 'S') || (face == 's')){
+        x = getXQuadra (quadra) + num;
+        y = getYQuadra (quadra);
+    }
+    else if ((face == 'L') || (face == 'l')){
+        x = getXQuadra (quadra);
+        y = getYQuadra (quadra) + num;
+    }
+    else if ((face == 'O') || (face == 'o')){
+        x = getXQuadra (quadra) + getWQuadra (quadra);
+        y = getYQuadra (quadra) + num;
+    }
+
+    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "green", "blue", "3");
+    inserirElemento (lextra, ponto);
+
+    DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
+    int cont = 0;
+
+    for (int i = 0; i < getTamAtual (lsemaforos); i++){
+        Semaforo semaforo = getElemento (lsemaforos, i);
+        DistImp s = malloc(sizeof(struct stDist));
+        s->elemento = semaforo;
+        s->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
+        distSemaforos[cont] = s;
+        cont++;
+    }
+
+    heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, k);
+    inveterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
+
+    fprintf (arqTXT, "-Semaforos mais proximos:\n");
+    for (int i = 0; i < k; i++){
+        fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
+        Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "green", "none", "6");
+        inserirElemento (lextra, circulo);
+    }
+
 }
 
 

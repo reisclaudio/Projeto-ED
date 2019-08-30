@@ -282,7 +282,8 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 	desalocarLista (listaRB, freeRadioBase);
 	desalocarLista (listaPredio, freePredio);
 	desalocarLista (listaMuro, freeMuro);
-
+	desalocarLista (listaExtras, freeForma);
+	
 	fclose(arqsvg);
 	fclose(arqsvg2);
 	fclose(arqtxt);	

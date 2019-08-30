@@ -6,11 +6,11 @@
 void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista Lformas, Lista Lquadra, Lista LHidrante,
 Lista Lsemaforo, Lista LRadio, Lista Lextra)
 {   
-    char cond[20], metrica[5], aux, strtexto[50], sufixo[20], cor[24], cstrk[24];
+    char cond[20], metrica[5], aux, strtexto[50], sufixo[20], cor[24], cstrk[24], cep [32], face;
     char j[20], k[20];
-    double x, y, w, h, r;
+    double x, y, w, h, r, num;
     double dx, dy, dist;
-    int ns;
+    int ns, ki;
     
     while (1){
         fscanf (nomearq, "%s", cond);
@@ -122,6 +122,17 @@ Lista Lsemaforo, Lista LRadio, Lista Lextra)
 
             fprintf (nometxt, "fi %lf %lf %d %lf\n", x, y, ns, r);
             consultaFI (x, y, ns, r, LHidrante, Lsemaforo, Lextra, nomesvg, nometxt);
+
+            fscanf (nomearq, "%c", &aux);
+        }
+        else if (strcmp (cond, "fs") == 0){
+            fscanf (nomearq, "%d", &ki);
+            fscanf (nomearq, "%s %c", cep, &face);
+            //fscanf (nomearq, "%c", &face);
+            fscanf (nomearq, "%lf", &num);
+
+            fprintf (nometxt, "fs %d %s %c %lf\n",ki, cep, face, num);
+            consultaFS (ki, cep, face, num, Lquadra, Lsemaforo, Lextra, nomesvg, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
