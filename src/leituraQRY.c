@@ -136,5 +136,16 @@ Lista Lsemaforo, Lista LRadio, Lista Lextra)
 
             fscanf (nomearq, "%c", &aux);
         }
+        else if (strcmp (cond, "fh") == 0){
+            fscanf (nomearq, "%d", &ki);
+            fscanf (nomearq, "%s %c", cep, &face);
+            //fscanf (nomearq, "%c", &face);
+            fscanf (nomearq, "%lf", &num);
+
+            fprintf (nometxt, "fh %d %s %c %lf\n", ki, cep, face, num);
+            consultaFH (ki, cep, face, num, Lquadra, LHidrante, Lextra, nomesvg, nometxt);
+
+            fscanf (nomearq, "%c", &aux);
+        }
     }
 }

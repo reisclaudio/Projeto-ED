@@ -1,0 +1,117 @@
+o? 1 2
+NAO
+
+crd? b05.4
+Quadra x = 430.000000 y = 405.000000 w = 120.000000 h = 80.000000
+
+fi 255.000000 250.000000 10 300.000000
+-ns Semaforos alterados:
+1 - sfb04.3
+2 - sfb03.2
+3 - sfb04.2
+4 - sfb02.3
+5 - sfb05.3
+6 - sfb02.2
+7 - sfb03.4
+8 - sfb05.2
+9 - sfb02.4
+10 - sfb01.3
+-Hidrantes ativados:
+1 - hnb01.1
+2 - hnob01.1
+3 - hneb01.1
+4 - hob01.1
+5 - hnb01.2
+6 - hnob01.2
+7 - hneb01.2
+8 - hob01.2
+9 - hnb01.3
+10 - hnob01.3
+11 - hneb01.3
+12 - hob01.3
+13 - hnb01.4
+14 - hneb01.4
+15 - hnb02.1
+16 - hnob02.1
+17 - hneb02.1
+18 - hob02.1
+19 - hnb02.2
+20 - hnob02.2
+21 - hneb02.2
+22 - hob02.2
+23 - hnb02.3
+24 - hnob02.3
+25 - hneb02.3
+26 - hob02.3
+27 - hnb02.4
+28 - hnob02.4
+29 - hneb02.4
+30 - hnb03.1
+31 - hnob03.1
+32 - hneb03.1
+33 - hob03.1
+34 - hnb03.2
+35 - hnob03.2
+36 - hneb03.2
+37 - hob03.2
+38 - hnb03.3
+39 - hnob03.3
+40 - hneb03.3
+41 - hob03.3
+42 - hnb03.4
+43 - hnob03.4
+44 - hneb03.4
+45 - hob03.4
+46 - hnb04.1
+47 - hnob04.1
+48 - hneb04.1
+49 - hob04.1
+50 - hnb04.2
+51 - hnob04.2
+52 - hneb04.2
+53 - hob04.2
+54 - hnb04.3
+55 - hnob04.3
+56 - hneb04.3
+57 - hob04.3
+58 - hnb04.4
+59 - hneb04.4
+60 - hnb05.1
+61 - hnob05.1
+62 - hob05.1
+63 - hnb05.2
+64 - hnob05.2
+65 - hneb05.2
+66 - hob05.2
+67 - hnb05.3
+68 - hnob05.3
+69 - hneb05.3
+70 - hob05.3
+71 - hneb05.4
+
+fh -10 b01.1 n 10.000000
+-k Hidrantes mais proximos: 
+1 - hneb01.1
+2 - hnb01.1
+3 - hneb02.1
+4 - hnb02.1
+5 - hnob01.1
+6 - hob01.1
+7 - hob02.1
+8 - hneb01.2
+9 - hnob02.1
+10 - hneb02.2
+
+fs 10 b01.4 o 50.000000
+-k Semaforos mais proximos:
+1 - sfb02.5
+2 - sfb02.4
+3 - sfb01.4
+4 - sfb03.4
+5 - sfb04.5
+6 - sfb02.3
+7 - sfb01.3
+8 - sfb04.3
+9 - sfb02.2
+10 - sfb01.2
+

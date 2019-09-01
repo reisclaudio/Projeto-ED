@@ -441,10 +441,10 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
         cont++;
     }
 
-    heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, ns);
+    min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, ns);
     inveterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
 
-    fprintf (arqTXT, "-Semaforos alterados:\n");
+    fprintf (arqTXT, "-ns Semaforos alterados:\n");
     for (int i = 0; i < ns; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "green", "none", "6");
@@ -462,6 +462,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
             j++;
         }
     }
+    fprintf (arqTXT, "\n");
 
     for (int i = 0; i < getTamAtual (lsemaforos); i++){
         free (distSemaforos[i]);
@@ -506,19 +507,86 @@ void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista 
         cont++;
     }
 
-    heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, k);
+    min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, k);
     inveterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
 
-    fprintf (arqTXT, "-Semaforos mais proximos:\n");
+    fprintf (arqTXT, "-k Semaforos mais proximos:\n");
     for (int i = 0; i < k; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "green", "none", "6");
         inserirElemento (lextra, circulo);
     }
+    fprintf (arqTXT, "\n");
 
+    for (int i = 0; i < getTamAtual (lsemaforos); i++){
+        free (distSemaforos[i]);
+    }
+    free (distSemaforos);
 }
 
+void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista lhidrantes, Lista lextra, FILE * arqSVG, FILE * arqTXT)
+{
+    double x, y;
+    Quadra quadra = encontrarElemento (lquadras, cep);
 
+    if ((face == 'N') || (face == 'n')){  
+        x = getXQuadra (quadra) + num;
+        y = getYQuadra (quadra) + getHQuadra (quadra);
+    }
+    else if ((face == 'S') || (face == 's')){
+        x = getXQuadra (quadra) + num;
+        y = getYQuadra (quadra);
+    }
+    else if ((face == 'L') || (face == 'l')){
+        x = getXQuadra (quadra);
+        y = getYQuadra (quadra) + num;
+    }
+    else if ((face == 'O') || (face == 'o')){
+        x = getXQuadra (quadra) + getWQuadra (quadra);
+        y = getYQuadra (quadra) + num;
+    }
+
+    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "pink", "yellow", "3");
+    inserirElemento (lextra, ponto);
+
+    DistImp *distHidrantes = (DistImp *) malloc(getTamAtual (lhidrantes) * sizeof(DistImp));
+    int cont = 0;
+
+    for (int i = 0; i < getTamAtual (lhidrantes); i++){
+        Hidrante hidrante = getElemento (lhidrantes, i);
+        DistImp s = malloc(sizeof(struct stDist));
+        s->elemento = hidrante;
+        s->dist = distanciaEuclidiana (x, y, getXHid (hidrante), getYSema (hidrante));
+        distHidrantes[cont] = s;
+        cont++;
+    }
+
+    if (k < 0){
+        k = k * -1;
+        min_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, k);
+        fprintf (arqTXT, "-k Hidrantes mais proximos: \n");
+    }
+
+    else if (k > 0){
+        max_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, getTamAtual (lhidrantes) - 1);
+        fprintf (arqTXT, "-k Hidrantes mais distantes: \n"); 
+    }
+
+    inveterVetor ((void *) distHidrantes, getTamAtual (lhidrantes));
+    for (int i = 0; i < k; i++){
+        fprintf (arqTXT, "%d - %s\n", i + 1, getIDHid(((Hidrante) distHidrantes[i]->elemento)));   
+        Forma circulo = criaForma (" ", 'x', getXHid (((Semaforo) distHidrantes[i]->elemento)) + 5, getYHid (((Semaforo) distHidrantes[i]->elemento)) + 5, 11, x, y, "blue", "none", "6");
+        inserirElemento (lextra, circulo);
+    }
+    fprintf (arqTXT, "\n");
+
+
+    for (int i = 0; i < getTamAtual (lhidrantes); i++){
+        free (distHidrantes[i]);
+    }
+    free (distHidrantes);
+
+}
 
 
     
