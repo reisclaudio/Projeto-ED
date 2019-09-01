@@ -67,34 +67,28 @@ void svgprintRadioBase (RadioBase radioBase, FILE * arqSVG)
 void svgprintPredio (Predio predio, FILE * arqSVG)
 {
     Predio p;
+    double xPredio, yPredio;
 
     if ((getFacePredio (predio) == 'N') || (getFacePredio (predio) == 'n')){
-        double xPredio = getxQPredio (predio) + getNumPredio (predio);
-        double yPredio = ((getyQPredio (predio) + gethQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
-
-        p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
+        xPredio = getxQPredio (predio) + getNumPredio (predio);
+        yPredio = ((getyQPredio (predio) + gethQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
     }
     else if ((getFacePredio (predio) == 'S') || (getFacePredio (predio) == 's')){
-        double xPredio = getxQPredio (predio) + getNumPredio (predio);
-        double yPredio = getyQPredio (predio) + getMrgPredio (predio);
-
-        p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
+        xPredio = getxQPredio (predio) + getNumPredio (predio);
+        yPredio = getyQPredio (predio) + getMrgPredio (predio);
     }
     else if ((getFacePredio (predio) == 'L') || (getFacePredio (predio) == 'l')){
-        double xPredio = getxQPredio (predio) + getMrgPredio (predio);
-        double yPredio = getyQPredio (predio) + getNumPredio (predio);
-
-        p = criaForma (" ", 'p', xPredio, yPredio, 0, getPPredio (predio), getFPredio (predio), "black", "white", "1");
+        xPredio = getxQPredio (predio) + getMrgPredio (predio);
+        yPredio = getyQPredio (predio) + getNumPredio (predio);
     }
     else if ((getFacePredio (predio) == 'O') || (getFacePredio (predio) == 'o')){
-        double xPredio = ((getxQPredio (predio) + getwQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
-        double yPredio = getyQPredio (predio) + getNumPredio (predio);
-
-        p = criaForma (" ", 'p', xPredio, yPredio, 0, getPPredio (predio), getFPredio (predio), "black", "white", "1");
+        xPredio = ((getxQPredio (predio) + getwQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
+        yPredio = getyQPredio (predio) + getNumPredio (predio);
     }
+    
+    p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
     svgprintrect (p, arqSVG);
     free (p); 
-
 }
 
 void svgprintMuro (Muro muro, FILE * arqSVG)
