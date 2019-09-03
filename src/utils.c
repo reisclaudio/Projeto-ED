@@ -126,7 +126,7 @@ bool pontoEstaContido (double x, double y, Elemento elemento)
     }
 }
 
-void inveterVetor (Dist vet[], int tamanhoVetor){
+void inverterVetor (Dist vet[], int tamanhoVetor){
     Dist aux;
     int j = tamanhoVetor -1;
     for (int i = 0; i < tamanhoVetor/2; i++){

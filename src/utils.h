@@ -18,7 +18,7 @@ bool estaContidoCC (Elemento elemento1, Elemento elemento2);
 bool estaContidoRR (Elemento elemento1, Elemento elemento2);
 bool estaContidoCR (Elemento elemento1, Elemento elemento2);
 bool pontoEstaContido (double x, double y, Elemento elemento);
-void inveterVetor (Dist vet[], int tamanhoVetor);
+void inverterVetor (Dist vet[], int tamanhoVetor);
 
 
 #endif

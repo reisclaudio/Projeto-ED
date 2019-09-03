@@ -442,7 +442,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
     }
 
     min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, ns);
-    inveterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
+    inverterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
 
     fprintf (arqTXT, "-ns Semaforos alterados:\n");
     for (int i = 0; i < ns; i++){
@@ -508,7 +508,7 @@ void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista 
     }
 
     min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, k);
-    inveterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
+    inverterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
 
     fprintf (arqTXT, "-k Semaforos mais proximos:\n");
     for (int i = 0; i < k; i++){
@@ -566,13 +566,12 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
         min_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, k);
         fprintf (arqTXT, "-k Hidrantes mais proximos: \n");
     }
-
     else if (k > 0){
         max_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, getTamAtual (lhidrantes) - 1);
         fprintf (arqTXT, "-k Hidrantes mais distantes: \n"); 
     }
 
-    inveterVetor ((void *) distHidrantes, getTamAtual (lhidrantes));
+    inverterVetor ((void *) distHidrantes, getTamAtual (lhidrantes));
     for (int i = 0; i < k; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDHid(((Hidrante) distHidrantes[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXHid (((Semaforo) distHidrantes[i]->elemento)) + 5, getYHid (((Semaforo) distHidrantes[i]->elemento)) + 5, 11, x, y, "blue", "none", "6");
@@ -580,12 +579,16 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
     }
     fprintf (arqTXT, "\n");
 
-
     for (int i = 0; i < getTamAtual (lhidrantes); i++){
         free (distHidrantes[i]);
     }
     free (distHidrantes);
 
+}
+
+void consultaBRL (double x, double y, FILE * arqSVG)
+{
+    
 }
 
 

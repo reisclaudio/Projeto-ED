@@ -147,5 +147,11 @@ Lista Lsemaforo, Lista LRadio, Lista Lextra)
 
             fscanf (nomearq, "%c", &aux);
         }
+        else if (strcmp (cond, "brl") == 0){
+            fscanf (nomearq, "%lf", &x);
+            fscanf (nomearq, "%lf", &y);
+
+            
+        }
     }
 }

@@ -9,6 +9,7 @@
 #include<math.h>
 #include"lista.h"
 #include"heapsort.h"
+#include"segmentos.h"
 
 /* Funcao que realiza a consulta "d?" do .qry */
 void consultaD (char* j, char* k,Lista lformas, FILE * nometxt, FILE * nomesvg);
