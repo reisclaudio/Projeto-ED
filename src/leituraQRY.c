@@ -4,7 +4,7 @@
 #include"utils.h"
 
 void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista Lformas, Lista Lquadra, Lista LHidrante,
-Lista Lsemaforo, Lista LRadio, Lista Lextra)
+Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
 {   
     char cond[20], metrica[5], aux, strtexto[50], sufixo[20], cor[24], cstrk[24], cep [32], face;
     char j[20], k[20];
@@ -151,7 +151,9 @@ Lista Lsemaforo, Lista LRadio, Lista Lextra)
             fscanf (nomearq, "%lf", &x);
             fscanf (nomearq, "%lf", &y);
 
-            
+            consultaBRL (x, y, Lpredios, Lmuros, nomesvg);
+
+            fscanf (nomearq, "%c", &aux); 
         }
     }
 }

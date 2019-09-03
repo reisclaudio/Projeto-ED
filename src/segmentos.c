@@ -23,5 +23,5 @@ void inserirSegmento (Segmento aux, int* tamanho, double x1, double y1, double x
     segmentos[*tamanho]->x2 = x2;
     segmentos[*tamanho]->y2 = y2;
 
-    *tamanho++;
+    *tamanho = *tamanho + 1;
 }

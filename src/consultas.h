@@ -34,6 +34,8 @@ void consultaDQ (char* id, char* metrica, double dist, Lista lquadras, Lista lhi
 void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista lsemaforos, Lista lextra,  FILE * arqSVG, FILE * arqTXT);
 void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista lsemaforos, Lista lextra, FILE * arqSVG, FILE * arqTXT);
 void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista lhidrantes, Lista lextra, FILE * arqSVG, FILE * arqTXT);
+void consultaBRL (double x, double y, Lista lpredios, Lista lmuros, FILE * arqSVG);
+
 
 
 

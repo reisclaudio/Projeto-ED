@@ -586,9 +586,19 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
 
 }
 
-void consultaBRL (double x, double y, FILE * arqSVG)
+void consultaBRL (double x, double y, Lista lpredios, Lista lmuros, FILE * arqSVG)
 {
+    int k = getTamAtual (lmuros) + (4* getTamAtual (lpredios));
+    Segmento* segmentos = criaSegmentos (k);
+    Muro muro;
+    int* tam = 0;
     
+    for (int i = 0; i < getTamAtual (lmuros); i++){
+       muro = getElemento (lmuros, i);
+
+       inserirSegmento (segmentos, tam, getX1Muro (muro), getY1Muro (muro), getX2Muro (muro), getY2Muro (muro)); 
+    }
+
 }
 
 

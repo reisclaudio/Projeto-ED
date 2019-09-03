@@ -261,7 +261,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 	imprimeListaSVG (listaPredio, arqsvg);	
 	imprimeListaSVG (listaMuro, arqsvg);
 		
-	leQRY (arqQry,arqGeo,arqtxt,arqsvg2, nomesvg2, listaFormas, listaQuadra, listaHid, listaSema, listaRB, listaExtras);
+	leQRY (arqQry,arqGeo,arqtxt,arqsvg2, nomesvg2, listaFormas, listaQuadra, listaHid, listaSema, listaRB, listaMuro, listaPredio, listaExtras);
 	
 	//Imprime listas no svg do .qry
 	imprimeListaSVG (listaQuadra, arqsvg2);
