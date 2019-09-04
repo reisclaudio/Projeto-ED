@@ -629,6 +629,9 @@ void consultaBRL (double x, double y, Lista listaPredios, Lista listaMuros, FILE
         inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp, yp + getPPredio (predio));
         inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp + getFPredio (predio), yp);
     }
+
+    Vertice vertices = criaVertices (x, y, (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)))*2, segmentos, tam, arqSVG);
+    sortVertices (vertices, tam);
     
 
     imprimeSegmentos (segmentos,tam, arqSVG);

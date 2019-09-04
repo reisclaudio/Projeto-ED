@@ -55,7 +55,7 @@ void freeSegmentos (Segmento aux, int tamanho)
     free (segmentos);
 }
 
-Vertice criaVertices (double x, double y, int capacidade, Segmento s, int tamanho)
+Vertice criaVertices (double x, double y, int capacidade, Segmento s, int tamanho, FILE * arqSVG)
 {
     int j = 0, k = 1;
     SegmentoImp *segmentos = (SegmentoImp *) s;
@@ -64,24 +64,33 @@ Vertice criaVertices (double x, double y, int capacidade, Segmento s, int tamanh
     for (int i = 0; i < tamanho; i++){
         vertices[j] = (VerticeImp) malloc (sizeof (struct StVertice));
         vertices[j]->x = segmentos[i]->x1;
-        vertices[j]->y = segmentos[i]->x2;
+        vertices[j]->y = segmentos[i]->y1;
         vertices[j]->dist = distanciaEuclidiana (x, y, vertices[j]->x, vertices[j]->y);
         vertices[j]->angulo = atan2 (vertices[j]->y - y, vertices[j]->x - x) * 180 / PI;
 
         vertices[k] = (VerticeImp) malloc (sizeof (struct StVertice));
-        vertices[k]->x = segmentos[i]->x1;
-        vertices[k]->y = segmentos[i]->x2;
+        vertices[k]->x = segmentos[i]->x2;
+        vertices[k]->y = segmentos[i]->y2;
         vertices[k]->dist = distanciaEuclidiana (x, y, vertices[k]->x, vertices[k]->y);
         vertices[k]->angulo = atan2 (vertices[k]->y - y, vertices[k]->x - x) * 180 / PI;
 
         if (vertices[j]->angulo < vertices[k]->angulo){
             vertices[j]->start = true;
             vertices[k]->start = false;
+            Forma forma = criaForma (" ", 'c', vertices[j]->x, vertices[j]->y, 4, 0, 0, "green", "green", "1");
+            Forma forma2 = criaForma (" ", 'c', vertices[k]->x, vertices[k]->y, 4, 0, 0, "red", "red", "1");
+            svgprintcircle (forma, arqSVG);
+            svgprintcircle (forma2, arqSVG);
         }
         else {
             vertices[j]->start = false;
             vertices[k]->start = true;
+            Forma forma = criaForma (" ", 'c', vertices[k]->x, vertices[k]->y, 4, 0, 0, "green", "green", "1");
+            Forma forma2 = criaForma (" ", 'c', vertices[j]->x, vertices[j]->y, 4, 0, 0, "red", "red", "1");
+            svgprintcircle (forma, arqSVG);
+            svgprintcircle (forma2, arqSVG);
         }
+        
         j+=2;
         k+=2;
     }
