@@ -598,10 +598,13 @@ void consultaBRL (double x, double y, Lista lpredios, Lista lmuros, FILE * arqSV
 
     for (int i = 0; i < getTamAtual (lpredios); i++){
         Predio predio = getElemento (lpredios, i);
-        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio));
-        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio), getXPredio (predio), getYPredio (predio) + gethQPredio (predio));
-        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio) + gethQPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio) + gethQPredio (predio));
-        inserirSegmento (segmentos, &tam, getXPredio (predio) + getwQPredio (predio), getYPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio) + gethQPredio (predio));
+        double xp = getXPredio (predio);
+        double yp = getYPredio (predio);
+
+        inserirSegmento (segmentos, &tam, xp, yp, xp + getFPredio (predio), yp);
+        inserirSegmento (segmentos, &tam, xp, yp, xp, yp + getPPredio (predio));
+        inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp, yp + getPPredio (predio));
+        inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp + getFPredio (predio), yp);
     }
     
 

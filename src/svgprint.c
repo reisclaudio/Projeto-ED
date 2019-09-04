@@ -66,9 +66,8 @@ void svgprintRadioBase (RadioBase radioBase, FILE * arqSVG)
 
 void svgprintPredio (Predio predio,  FILE * arqSVG)
 {  
-    Forma p;
-
-    p = criaForma (" ", 'p', getXPredio (predio), getYPredio (predio), 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
+    Forma p = criaForma (" ", 'p', getXPredio (predio), getYPredio (predio), 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
+    
     svgprintrect (p, arqSVG);
     free (p); 
 }
