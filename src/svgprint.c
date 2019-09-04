@@ -64,29 +64,11 @@ void svgprintRadioBase (RadioBase radioBase, FILE * arqSVG)
     fprintf (arqSVG, "<text x=\"%lf\" y=\"%lf\" font-size=\"5\" fill=\"%s\"> RB </text>\n", getXHid (radioBase)+3, getYHid (radioBase) + 4, getCor2RB (radioBase));
 }
 
-void svgprintPredio (Predio predio, FILE * arqSVG)
-{
-    Predio p;
-    double xPredio, yPredio;
+void svgprintPredio (Predio predio,  FILE * arqSVG)
+{  
+    Forma p;
 
-    if ((getFacePredio (predio) == 'N') || (getFacePredio (predio) == 'n')){
-        xPredio = getxQPredio (predio) + getNumPredio (predio);
-        yPredio = ((getyQPredio (predio) + gethQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
-    }
-    else if ((getFacePredio (predio) == 'S') || (getFacePredio (predio) == 's')){
-        xPredio = getxQPredio (predio) + getNumPredio (predio);
-        yPredio = getyQPredio (predio) + getMrgPredio (predio);
-    }
-    else if ((getFacePredio (predio) == 'L') || (getFacePredio (predio) == 'l')){
-        xPredio = getxQPredio (predio) + getMrgPredio (predio);
-        yPredio = getyQPredio (predio) + getNumPredio (predio);
-    }
-    else if ((getFacePredio (predio) == 'O') || (getFacePredio (predio) == 'o')){
-        xPredio = ((getxQPredio (predio) + getwQPredio (predio)) - getMrgPredio (predio)) - getPPredio (predio);
-        yPredio = getyQPredio (predio) + getNumPredio (predio);
-    }
-    
-    p = criaForma (" ", 'p', xPredio, yPredio, 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
+    p = criaForma (" ", 'p', getXPredio (predio), getYPredio (predio), 0, getFPredio (predio), getPPredio (predio), "black", "white", "1");
     svgprintrect (p, arqSVG);
     free (p); 
 }

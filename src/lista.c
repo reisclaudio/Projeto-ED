@@ -230,14 +230,14 @@ void imprimeListaSVG (Lista lista, FILE* arqSVG)
 
     for (int i = aux->inicio; i != NULO; i = aux->v[i].prox){        
         if (getTipo (aux->v[i].elemento) == 'q') svgprintQuadra (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'h') svgprintHidrante (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 's') svgprintSemaforo (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'b') svgprintRadioBase (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'c') svgprintcircle (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'r') svgprintrect (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'p') svgprintPredio (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'm') svgprintMuro (aux->v[i].elemento, arqSVG);
-        if (getTipo (aux->v[i].elemento) == 'x') svgprintCircleLine (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'h') svgprintHidrante (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 's') svgprintSemaforo (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'b') svgprintRadioBase (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'c') svgprintcircle (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'r') svgprintrect (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'p') svgprintPredio (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'm') svgprintMuro (aux->v[i].elemento, arqSVG);
+        else if (getTipo (aux->v[i].elemento) == 'x') svgprintCircleLine (aux->v[i].elemento, arqSVG);
     }
 }
 

@@ -425,7 +425,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
 {
     double dist;
     Semaforo semaforo;
-    Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "orange", "red", "3");
+    Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "orange", "red", "5");
     inserirElemento (lextra, foco);
 
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
@@ -447,7 +447,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
     fprintf (arqTXT, "-ns Semaforos alterados:\n");
     for (int i = 0; i < ns; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
-        Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "green", "none", "6");
+        Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "orange", "none", "6");
         inserirElemento (lextra, circulo);
     }
 
@@ -457,7 +457,7 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
         Elemento hidrante = getElemento (lhidrantes, i);
         if ((distanciaEuclidiana (getXHid (hidrante), getYHid (hidrante), x, y)) <= r){
             fprintf (arqTXT, "%d - %s\n", j, getIDHid(hidrante));
-            Forma circulo = criaForma (" ", 'x', getXHid (hidrante) + 5, getYSema (hidrante) + 5 , 11, x, y, "blue", "none", "6");
+            Forma circulo = criaForma (" ", 'x', getXHid (hidrante) + 5, getYSema (hidrante) + 5 , 11, x, y, "orange", "none", "6");
             inserirElemento (lextra, circulo);
             j++;
         }
@@ -492,7 +492,7 @@ void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista 
         y = getYQuadra (quadra) + num;
     }
 
-    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "green", "blue", "3");
+    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "green", "blue", "5");
     inserirElemento (lextra, ponto);
 
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
@@ -546,7 +546,7 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
         y = getYQuadra (quadra) + num;
     }
 
-    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "pink", "yellow", "3");
+    Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "pink", "yellow", "5");
     inserirElemento (lextra, ponto);
 
     DistImp *distHidrantes = (DistImp *) malloc(getTamAtual (lhidrantes) * sizeof(DistImp));
@@ -574,7 +574,7 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
     inverterVetor ((void *) distHidrantes, getTamAtual (lhidrantes));
     for (int i = 0; i < k; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDHid(((Hidrante) distHidrantes[i]->elemento)));   
-        Forma circulo = criaForma (" ", 'x', getXHid (((Semaforo) distHidrantes[i]->elemento)) + 5, getYHid (((Semaforo) distHidrantes[i]->elemento)) + 5, 11, x, y, "blue", "none", "6");
+        Forma circulo = criaForma (" ", 'x', getXHid (((Semaforo) distHidrantes[i]->elemento)) + 5, getYHid (((Semaforo) distHidrantes[i]->elemento)) + 5, 11, x, y, "pink", "none", "6");
         inserirElemento (lextra, circulo);
     }
     fprintf (arqTXT, "\n");
@@ -588,17 +588,25 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
 
 void consultaBRL (double x, double y, Lista lpredios, Lista lmuros, FILE * arqSVG)
 {
-    int k = getTamAtual (lmuros) + (4* getTamAtual (lpredios));
-    Segmento* segmentos = criaSegmentos (k);
-    Muro muro;
-    int* tam = 0;
+    Segmento segmentos = criaSegmentos (getTamAtual (lmuros) + (4* getTamAtual (lpredios)));
+    int tam = 0;
     
     for (int i = 0; i < getTamAtual (lmuros); i++){
-       muro = getElemento (lmuros, i);
-
-       inserirSegmento (segmentos, tam, getX1Muro (muro), getY1Muro (muro), getX2Muro (muro), getY2Muro (muro)); 
+        Muro muro = getElemento (lmuros, i);
+        inserirSegmento (segmentos, &tam, getX1Muro (muro), getY1Muro (muro), getX2Muro (muro), getY2Muro (muro)); 
     }
 
+    for (int i = 0; i < getTamAtual (lpredios); i++){
+        Predio predio = getElemento (lpredios, i);
+        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio));
+        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio), getXPredio (predio), getYPredio (predio) + gethQPredio (predio));
+        inserirSegmento (segmentos, &tam, getXPredio (predio), getYPredio (predio) + gethQPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio) + gethQPredio (predio));
+        inserirSegmento (segmentos, &tam, getXPredio (predio) + getwQPredio (predio), getYPredio (predio), getXPredio (predio) + getwQPredio (predio), getYPredio (predio) + gethQPredio (predio));
+    }
+    
+
+    imprimeSegmentos (segmentos,tam, arqSVG);
+    freeSegmentos (segmentos, tam);
 }
 
 

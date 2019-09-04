@@ -184,7 +184,24 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			double hQ = getHQuadra (quadraPredio);
 			double wQ = getWQuadra (quadraPredio);
 
-			predio = criaPredio (cep, face, num, f, p , mrg, xQ, yQ, hQ, wQ);
+			if (face == 'N'){
+				 x = xQ + num;
+				 y = ((yQ + hQ)) - mrg - p; 
+			}
+			else if (face == 'S') {
+				x = xQ + num;
+				y = yQ + mrg;
+			}
+			else if (face == 'L'){
+				x = xQ + mrg;
+				y = yQ + num;
+			}
+			else if (face == 'O'){
+				x = ((xQ + wQ)) - mrg - p;
+				y = yQ + num;
+			}
+
+			predio = criaPredio (cep, face, num, f, p , mrg, x, y, hQ, wQ);
 			inserirElemento (listaPredio, predio);
 	
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"

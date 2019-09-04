@@ -4,12 +4,13 @@ struct StPredio {
     char cep [50], tipo;
     char face;
     double num, f, p, mrg;
-    double xQ, yQ, hQ, wQ;
+    double x, y;
+    double hQ, wQ;
 };
 
 typedef struct StPredio *PredioImp;
 
-Predio criaPredio (char cep[], char face, double num, double f, double p, double mrg, double xQ, double yQ, double hQ, double wQ)
+Predio criaPredio (char cep[], char face, double num, double f, double p, double mrg, double x, double y, double hQ, double wQ)
 {
     PredioImp novo;
     novo = (PredioImp) malloc (sizeof (struct StPredio));
@@ -21,8 +22,8 @@ Predio criaPredio (char cep[], char face, double num, double f, double p, double
     novo->f = f;
     novo->p = p;
     novo->mrg = mrg;
-    novo->xQ = xQ;
-    novo->yQ = yQ;
+    novo->x = x;
+    novo->y = y;
     novo->hQ = hQ;
     novo->wQ = wQ;
 
@@ -71,18 +72,25 @@ double getMrgPredio (Predio predio)
     return p->mrg;
 }
 
-double getxQPredio (Predio predio)
+void freePredio (Predio predio)
 {
     PredioImp p;
     p = (PredioImp) predio;
-    return p->xQ;
+    free (p);
 }
 
-double getyQPredio (Predio predio)
+double getXPredio (Predio predio)
 {
     PredioImp p;
     p = (PredioImp) predio;
-    return p->yQ;
+    return p->x;
+}
+
+double getYPredio (Predio predio)
+{
+    PredioImp p;
+    p = (PredioImp) predio;
+    return p->y;
 }
 
 double gethQPredio (Predio predio)
@@ -98,11 +106,3 @@ double getwQPredio (Predio predio)
     p = (PredioImp) predio;
     return p->wQ;
 }
-
-void freePredio (Predio predio)
-{
-    PredioImp p;
-    p = (PredioImp) predio;
-    free (p);
-}
-
