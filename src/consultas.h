@@ -19,8 +19,6 @@ void consultaO (char* j, char* k,Lista lformas, FILE * nometxt, FILE * nomesvg);
 void consultaI (char* j, double x, double y, Lista lformas, FILE * nometxt, FILE * nomesvg);
 /* Funcao que realiza a consulta "BB" do .qry */  
 void consultaBB (char * sufixo, char * cor, char * nomesvg, Lista lformas, FILE * nomegeo);
-/* Funcao que le apenas o .geo para auxiliar na consulta "BB" */
-void geoBB (FILE * nomegeo, FILE * nomesvg, Lista lformas, char * cor);
 /* Funcao que realiza a consulta "crd?" do .qry */  
 bool consultaCRD (char *j, Lista lquadras, Lista lhidrantes, Lista lsemaforos, Lista lRB, FILE *nometxt);
 /* Funcao que realiza a consulta "del" do .qry */  

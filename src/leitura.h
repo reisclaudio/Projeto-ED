@@ -15,8 +15,8 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 /* Funcao que le apenas o .geo, para o caso de o .qry ser nulo */
 void leGEO (FILE * arqGeo, char * nomesvg);
 /* Funcao que le as consultas do arquivo .qry */
-void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista Lformas, Lista Lquadra, Lista LHidrante,
-Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra);
+void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista listaFormas, Lista listaQuadras, Lista listaHidrantes,
+Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredios, Lista listaExtra);  
 
 #endif
 

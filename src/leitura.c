@@ -78,13 +78,13 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 	}
 
 	Lista listaFormas = iniciaLista (nx);
-	Lista listaQuadra = iniciaLista (nq);
-	Lista listaHid = iniciaLista (nh);
-	Lista listaSema = iniciaLista (ns);
-	Lista listaRB = iniciaLista (nr);
-	Lista listaPredio = iniciaLista (np);
-	Lista listaMuro = iniciaLista (nm);
-	Lista listaExtras = iniciaLista (nx);
+	Lista listaQuadras = iniciaLista (nq);
+	Lista listaHidrantes = iniciaLista (nh);
+	Lista listaSemaforos = iniciaLista (ns);
+	Lista listaRadiosBase = iniciaLista (nr);
+	Lista listaPredios = iniciaLista (np);
+	Lista listaMuros = iniciaLista (nm);
+	Lista listaExtra = iniciaLista (nx);
 
 	rewind (arqGeo);
 	
@@ -132,7 +132,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &h);
 
 			quadra = criaQuadra (cep, x, y, w, h, c1q, c2q, swq);
-			inserirElemento (listaQuadra, quadra);
+			inserirElemento (listaQuadras, quadra);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -143,7 +143,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &y);
 
 			hidrante = criaHidrante (id, x, y, c1h, c2h, swh);
-			inserirElemento (listaHid, hidrante);
+			inserirElemento (listaHidrantes, hidrante);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -154,7 +154,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &y);
 
 			semaforo = criaSemaforo (id, x, y, c1s, c2s, sws);
-			inserirElemento (listaSema, semaforo);
+			inserirElemento (listaSemaforos, semaforo);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -165,7 +165,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &y);
 
 			radioBase = criaRadioBase (id, x, y, c1t, c2t, swt);
-			inserirElemento (listaRB, radioBase);
+			inserirElemento (listaRadiosBase, radioBase);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -178,7 +178,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &p);
 			fscanf (arqGeo, "%lf", &mrg);
 
-			Quadra quadraPredio = encontrarElemento (listaQuadra, cep);
+			Quadra quadraPredio = encontrarElemento (listaQuadras, cep);
 			double xQ = getXQuadra (quadraPredio);
 			double yQ = getYQuadra (quadraPredio);
 			double hQ = getHQuadra (quadraPredio);
@@ -202,7 +202,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			}
 
 			predio = criaPredio (cep, face, num, f, p , mrg, x, y, hQ, wQ);
-			inserirElemento (listaPredio, predio);
+			inserirElemento (listaPredios, predio);
 	
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -214,7 +214,7 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 			fscanf (arqGeo, "%lf", &y2);
 
 			muro = criaMuro (x1, y1, x2, y2);
-			inserirElemento (listaMuro, muro);
+			inserirElemento (listaMuros, muro);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -271,35 +271,35 @@ void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, ch
 	//Imprime listas no svg do.geo
 	imprimeListaSVG (listaFormas, arqsvg);
 	imprimeListaSVG (listaFormas, arqsvg2);		
-	imprimeListaSVG (listaQuadra, arqsvg);
-	imprimeListaSVG (listaHid, arqsvg);
-	imprimeListaSVG (listaSema, arqsvg);
-	imprimeListaSVG (listaRB, arqsvg);
-	imprimeListaSVG (listaPredio, arqsvg);	
-	imprimeListaSVG (listaMuro, arqsvg);
+	imprimeListaSVG (listaQuadras, arqsvg);
+	imprimeListaSVG (listaHidrantes, arqsvg);
+	imprimeListaSVG (listaSemaforos, arqsvg);
+	imprimeListaSVG (listaRadiosBase, arqsvg);
+	imprimeListaSVG (listaPredios, arqsvg);	
+	imprimeListaSVG (listaMuros, arqsvg);
 		
-	leQRY (arqQry,arqGeo,arqtxt,arqsvg2, nomesvg2, listaFormas, listaQuadra, listaHid, listaSema, listaRB, listaMuro, listaPredio, listaExtras);
+	leQRY (arqQry,arqGeo,arqtxt,arqsvg2, nomesvg2, listaFormas, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase, listaMuros, listaPredios, listaExtra);
 	
 	//Imprime listas no svg do .qry
-	imprimeListaSVG (listaQuadra, arqsvg2);
-	imprimeListaSVG (listaHid, arqsvg2);
-	imprimeListaSVG (listaSema, arqsvg2);
-	imprimeListaSVG (listaRB, arqsvg2);
-	imprimeListaSVG (listaPredio, arqsvg2);
-	imprimeListaSVG (listaMuro, arqsvg2);	
-	imprimeListaSVG (listaExtras, arqsvg2);
+	imprimeListaSVG (listaQuadras, arqsvg2);
+	imprimeListaSVG (listaHidrantes, arqsvg2);
+	imprimeListaSVG (listaSemaforos, arqsvg2);
+	imprimeListaSVG (listaRadiosBase, arqsvg2);
+	imprimeListaSVG (listaPredios, arqsvg2);
+	imprimeListaSVG (listaMuros, arqsvg2);	
+	imprimeListaSVG (listaExtra, arqsvg2);
 
 	fprintf (arqsvg2, "</svg>\n");
 	fprintf (arqsvg, "</svg>\n");
 
 	desalocarLista (listaFormas, freeForma);
-	desalocarLista (listaHid, freeHidrante);
-	desalocarLista (listaQuadra, freeQuadra);
-	desalocarLista (listaSema, freeSemaforo);
-	desalocarLista (listaRB, freeRadioBase);
-	desalocarLista (listaPredio, freePredio);
-	desalocarLista (listaMuro, freeMuro);
-	desalocarLista (listaExtras, freeForma);
+	desalocarLista (listaHidrantes, freeHidrante);
+	desalocarLista (listaQuadras, freeQuadra);
+	desalocarLista (listaSemaforos, freeSemaforo);
+	desalocarLista (listaRadiosBase, freeRadioBase);
+	desalocarLista (listaPredios, freePredio);
+	desalocarLista (listaMuros, freeMuro);
+	desalocarLista (listaExtra, freeForma);
 	
 	fclose(arqsvg);
 	fclose(arqsvg2);

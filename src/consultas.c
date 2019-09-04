@@ -10,14 +10,14 @@ typedef struct {
     double raio;
 } valores;
 
-void consultaD (char* j, char* k,Lista lformas, FILE * nometxt, FILE * nomesvg)
+void consultaD (char* j, char* k,Lista listaFormas, FILE * nometxt, FILE * nomesvg)
 {
     char strtexto[50];
     double dist, xline, yline;
     valores d[2];
 
-    Elemento elemento1 = encontrarElemento (lformas, j);
-    Elemento elemento2 = encontrarElemento (lformas, k);
+    Elemento elemento1 = encontrarElemento (listaFormas, j);
+    Elemento elemento2 = encontrarElemento (listaFormas, k);
         
     dist = distCentrosMassa (elemento1, elemento2);
     sprintf(strtexto, "%lf", dist);
@@ -30,14 +30,14 @@ void consultaD (char* j, char* k,Lista lformas, FILE * nometxt, FILE * nomesvg)
     svgprinttext (strtexto, xline, yline, nomesvg);
 }
 
-void consultaO (char* j, char* k, Lista lformas, FILE * nometxt, FILE * nomesvg)
+void consultaO (char* j, char* k, Lista listaFormas, FILE * nometxt, FILE * nomesvg)
 {
     double dist, h, w, x, y, xmin, xmax, ymin, ymax;
     double mx, mex, my, mey,mxr, mexr,myr, meyr, wm, hm;
     valores d[2];
     
-    Elemento elemento1 = encontrarElemento (lformas, j);
-    Elemento elemento2 = encontrarElemento (lformas, k);
+    Elemento elemento1 = encontrarElemento (listaFormas, j);
+    Elemento elemento2 = encontrarElemento (listaFormas, k);
     
     //Verifica se as duas figuras sao circulos, coleta os dados
     //E realiza os calculos da sobreposiçao
@@ -171,12 +171,12 @@ void consultaO (char* j, char* k, Lista lformas, FILE * nometxt, FILE * nomesvg)
     }
 }
 
-void consultaI (char* j, double x, double y, Lista lformas, FILE * nometxt, FILE * nomesvg)
+void consultaI (char* j, double x, double y, Lista listaFormas, FILE * nometxt, FILE * nomesvg)
 {
     double dist;
     valores d;
     
-    Elemento elemento = encontrarElemento (lformas, j);
+    Elemento elemento = encontrarElemento (listaFormas, j);
 
     d.x = getXForma(elemento) + (getWForma (elemento)/2.0);
     d.y = getYForma (elemento) + (getHForma (elemento)/2.0);
@@ -196,21 +196,44 @@ void consultaI (char* j, double x, double y, Lista lformas, FILE * nometxt, FILE
     }
 }
 
-void consultaBB (char * sufixo, char * cor, char * nomesvg, Lista lformas, FILE * nomegeo)
+void consultaBB (char * sufixo, char * cor, char * nomesvg, Lista listaFormas, FILE * nomegeo)
 {   
     char * arqsvg3;
     FILE * arqBB;
     arqsvg3 = criaSVG3 (nomesvg, sufixo);
+    
     arqBB = fopen (arqsvg3, "w+");
     verificaArquivo (arqBB, arqsvg3);
+    fprintf (arqBB, "<svg>\n");
 
-    geoBB (nomegeo, arqBB, lformas, cor);
+    imprimeListaSVG (listaFormas, arqBB);
+    for (int i = 0; i < getTamAtual (listaFormas); i++){
+        Elemento forma = getElemento (listaFormas, i);
+        if (getTipo (forma) == 'c'){
+            double hr = 2*getRaioForma (forma);
+			double wr = 2*getRaioForma (forma);
+			double xr = getXForma (forma) - getRaioForma (forma);
+			double yr = getYForma (forma) - getRaioForma (forma);
+
+			Forma retangulo = criaForma ("0", 'r', xr, yr, 0, wr, hr, cor, "none", "1");
+			svgprintrect (retangulo, arqBB);
+        }
+        else {
+            double cx = getXForma (forma) + getWForma (forma)/2.0;
+			double cy = getYForma (forma) + getHForma (forma)/2.0;
+			double ry = getHForma (forma)/2;
+			double rx = getWForma (forma)/2;
+
+			svgprintellipse(cx, cy, rx, ry, cor, arqBB);
+        }
+    }
+    fprintf (arqBB, "</svg>\n");
 }
 
-bool consultaCRD (char *j, Lista lquadras, Lista lhidrantes, Lista lsemaforos, Lista lRB, FILE *nometxt)
+bool consultaCRD (char *j, Lista listaQuadras, Lista listaHidrantes, Lista listaSemaforos, Lista listaRadiosBase, FILE *nometxt)
 {
     char tipo;
-    Elemento elemento = encontrarElementoListas (j, lquadras, lhidrantes, lsemaforos, lRB);
+    Elemento elemento = encontrarElementoListas (j, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase);
 
     if (elemento != NULL){
         tipo = getTipo (elemento);
@@ -229,31 +252,31 @@ bool consultaCRD (char *j, Lista lquadras, Lista lhidrantes, Lista lsemaforos, L
     }
 }
 
-bool consultaDEL (char *j, Lista lquadras, Lista lhidrantes, Lista lsemaforos, Lista lRB, FILE *nometxt)
+bool consultaDEL (char *j, Lista listaQuadras, Lista listaHidrantes, Lista listaSemaforos, Lista listaRadiosBase, FILE *nometxt)
 {
-    Elemento elemento = encontrarElementoListas (j, lquadras, lhidrantes, lsemaforos, lRB);
+    Elemento elemento = encontrarElementoListas (j, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase);
 
     char tipo = getTipo (elemento);
 
     if (tipo == 'q'){
         fprintf (nometxt, "Quadra x = %lf y = %lf w = %lf h = %lf\n\n", getXQuadra (elemento), getYQuadra (elemento), getWQuadra (elemento), getHQuadra (elemento));
-        excluirElemento (lquadras, j);
+        excluirElemento (listaQuadras, j);
     }
     else if (tipo == 'h'){
         fprintf (nometxt, "Hidrante x = %lf y = %lf\n\n", getXHid (elemento), getYHid (elemento));
-        excluirElemento (lhidrantes, j);
+        excluirElemento (listaHidrantes, j);
     }
     else if (tipo == 's') {
         fprintf (nometxt, "Semaforo x = %lf y = %lf\n\n", getXSema (elemento), getYSema(elemento));
-        excluirElemento (lsemaforos, j);
+        excluirElemento (listaSemaforos, j);
     }
     else if (tipo == 'b'){
         fprintf (nometxt, "Radio base x = %lf y = %lf\n\n", getXRB (elemento), getYRB(elemento));
-        excluirElemento (lRB, j);
+        excluirElemento (listaRadiosBase, j);
     }
 }
 
-void consultaCBQ (double x, double y, double r, char* cstrk, Lista lquadras, FILE *nometxt)
+void consultaCBQ (double x, double y, double r, char* cstrk, Lista listaQuadras, FILE *nometxt)
 {
     Elemento quadra;
     char cep[20];
@@ -261,8 +284,8 @@ void consultaCBQ (double x, double y, double r, char* cstrk, Lista lquadras, FIL
     int contador = 0, i;
     fprintf (nometxt, "Quadras com bordas alteradas: ");
 
-    for (i = 0; i < getTamAtual (lquadras);i++){
-        quadra = getElemento (lquadras, i);
+    for (i = 0; i < getTamAtual (listaQuadras);i++){
+        quadra = getElemento (listaQuadras, i);
 
         if (distanciaEuclidiana (x, y, getXQuadra (quadra), getYQuadra (quadra)) <= r) 
             contador++;        
@@ -282,15 +305,15 @@ void consultaCBQ (double x, double y, double r, char* cstrk, Lista lquadras, FIL
     fprintf (nometxt, "\n\n");
 }
 
-void consultaTRNS (double x, double y, double w, double h, double dx, double dy, Lista lquadras,Lista lhidrantes, Lista lsemaforos, Lista lrb, FILE*nometxt)
+void consultaTRNS (double x, double y, double w, double h, double dx, double dy, Lista listaQuadras,Lista listaHidrantes, Lista listaSemaforos, Lista listaRadiosBase, FILE*nometxt)
 {
     Elemento elemento;
     Elemento newElemento;
     char cep[20], id[20];
     int contador = 0, i=0;
 
-    for (i = 0; i < getTamAtual (lquadras); i++){
-        elemento = getElemento (lquadras, i);
+    for (i = 0; i < getTamAtual (listaQuadras); i++){
+        elemento = getElemento (listaQuadras, i);
 
         if (getXQuadra (elemento) > x && getXQuadra (elemento) < x + w && getYQuadra (elemento) > y && getYQuadra (elemento) < y + h) 
             contador++;
@@ -310,8 +333,8 @@ void consultaTRNS (double x, double y, double w, double h, double dx, double dy,
         contador = 0;
     }
 
-    for (i = 0; i<getTamAtual (lhidrantes); i++){
-        elemento = getElemento (lhidrantes, i);
+    for (i = 0; i<getTamAtual (listaHidrantes); i++){
+        elemento = getElemento (listaHidrantes, i);
 
         if (getXHid (elemento) > x && getXHid (elemento) < x + w && getYHid (elemento) > y && getYHid (elemento) < y + h){
             fprintf (nometxt, "%s: \n Posicao anterior: (%lf, %lf) \n Posicao atualizada: (%lf, %lf)\n", getIDHid (elemento), getXHid (elemento), getYHid (elemento), getXHid (elemento) + dx, getYHid (elemento) + dy);
@@ -321,8 +344,8 @@ void consultaTRNS (double x, double y, double w, double h, double dx, double dy,
         }
     }
 
-    for (i = 0; i<getTamAtual (lsemaforos); i++){
-        elemento = getElemento (lsemaforos, i);
+    for (i = 0; i<getTamAtual (listaSemaforos); i++){
+        elemento = getElemento (listaSemaforos, i);
 
         if (getXSema (elemento) > x && getXSema (elemento) < x + w && getYSema (elemento) > y && getYSema (elemento) < y + h){
             fprintf (nometxt, "%s: \n Posicao anterior: (%lf, %lf) \n Posicao atualizada: (%lf, %lf)\n", getIDSema (elemento), getXSema (elemento), getYSema (elemento), getXSema (elemento) + dx, getYSema (elemento) + dy);
@@ -332,8 +355,8 @@ void consultaTRNS (double x, double y, double w, double h, double dx, double dy,
         }
     }
 
-    for (i = 0; i<getTamAtual (lrb); i++){
-        elemento = getElemento (lrb, i);
+    for (i = 0; i<getTamAtual (listaRadiosBase); i++){
+        elemento = getElemento (listaRadiosBase, i);
 
         if (getXRB (elemento) > x && getXRB (elemento) < x + w && getYRB (elemento) > y && getYRB (elemento) < y + h){
             fprintf (nometxt, "%s: \n Posicao anterior: (%lf, %lf) \n Posicao atualizada: (%lf, %lf)\n", getIDRB (elemento), getXRB (elemento), getYRB (elemento), getXRB (elemento) + dx, getYRB (elemento) + dy);
@@ -345,21 +368,21 @@ void consultaTRNS (double x, double y, double w, double h, double dx, double dy,
     fprintf (nometxt, "\n\n");
 }
 
-void consultaDQ (char* id, char* metrica, double dist, Lista lquadras, Lista lhidrantes, Lista lsemaforos, Lista lRB, FILE* nometxt, FILE* nomesvg)
+void consultaDQ (char* id, char* metrica, double dist, Lista listaQuadras, Lista listaHidrantes, Lista listaSemaforos, Lista listaRadiosBase, FILE* nometxt, FILE* nomesvg)
 {
     char cep [20];
-    Elemento elemento = encontrarElementoListas (id, lquadras, lhidrantes, lsemaforos, lRB);
+    Elemento elemento = encontrarElementoListas (id, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase);
     Elemento quadra;
 
     svgprintDoubleCircle (elemento, nomesvg);
-    int tamanhoLista = getTamAtual (lquadras);
+    int tamanhoLista = getTamAtual (listaQuadras);
     fprintf (nometxt, "Equipamento Urbano: %s x = %lf y = %lf\nQuadras removidas: ", getIDHid (elemento), getXHid (elemento), getYHid (elemento));
 
     //L1: Manhattan Distance
     if (strcmp (metrica, "L1") == 0){
         int contador = 0;
         for (int i = 0; i < tamanhoLista; i++){
-            quadra = getElemento (lquadras, i);
+            quadra = getElemento (listaQuadras, i);
 
             if (manhattanDistance (getXHid (elemento), getYHid (elemento), getXQuadra (quadra), getYQuadra (quadra)) <= dist)
                 contador++;
@@ -372,7 +395,7 @@ void consultaDQ (char* id, char* metrica, double dist, Lista lquadras, Lista lhi
 
             if (contador == 4){
                 fprintf (nometxt, "%s ", getCEPQuadra (quadra));
-                excluirElemento (lquadras, getCEPQuadra (quadra));
+                excluirElemento (listaQuadras, getCEPQuadra (quadra));
             }
             contador = 0;
         }
@@ -382,7 +405,7 @@ void consultaDQ (char* id, char* metrica, double dist, Lista lquadras, Lista lhi
     else if (strcmp (metrica, "L2") == 0){
         int contador = 0;
         for (int i = 0; i < tamanhoLista; i++){
-            quadra = getElemento (lquadras, i);
+            quadra = getElemento (listaQuadras, i);
 
             if (distanciaEuclidiana (getXHid (elemento), getYHid (elemento), getXQuadra (quadra), getYQuadra (quadra)) <= dist) 
                 contador++;        
@@ -395,7 +418,7 @@ void consultaDQ (char* id, char* metrica, double dist, Lista lquadras, Lista lhi
             
             if (contador == 4){
                 fprintf (nometxt, "%s ", getCEPQuadra (quadra));
-                excluirElemento (lquadras, getCEPQuadra (quadra));
+                excluirElemento (listaQuadras, getCEPQuadra (quadra));
             }
             contador = 0;
         }
@@ -421,19 +444,19 @@ Elemento getCep (Dist distAux){
 }
 
 
-void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista lsemaforos, Lista lextra,  FILE * arqSVG, FILE * arqTXT)
+void consultaFI (double x, double y, int ns, double r, Lista listaHidrantes, Lista listaSemaforos, Lista listaExtra,  FILE * arqSVG, FILE * arqTXT)
 {
     double dist;
     Semaforo semaforo;
     Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "orange", "red", "5");
-    inserirElemento (lextra, foco);
+    inserirElemento (listaExtra, foco);
 
-    DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
+    DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (listaSemaforos) * sizeof(DistImp));
     int cont = 0;
-    int tam = getTamAtual (lhidrantes);
+    int tam = getTamAtual (listaHidrantes);
 
-    for (int i = 0; i < getTamAtual (lsemaforos); i++){
-        semaforo = getElemento (lsemaforos, i);
+    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
+        semaforo = getElemento (listaSemaforos, i);
         DistImp s = malloc(sizeof(struct stDist));
         s->elemento = semaforo;
         s->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
@@ -441,39 +464,39 @@ void consultaFI (double x, double y, int ns, double r, Lista lhidrantes, Lista l
         cont++;
     }
 
-    min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, ns);
-    inverterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
+    min_heap_sort((void *) distSemaforos, getTamAtual (listaSemaforos) - 1, ns);
+    inverterVetor ((void *) distSemaforos, getTamAtual (listaSemaforos));
 
     fprintf (arqTXT, "-ns Semaforos alterados:\n");
     for (int i = 0; i < ns; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "orange", "none", "6");
-        inserirElemento (lextra, circulo);
+        inserirElemento (listaExtra, circulo);
     }
 
     fprintf (arqTXT, "-Hidrantes ativados:\n");
     int j = 1;
-    for (int i = 0; i < getTamAtual (lhidrantes); i++){
-        Elemento hidrante = getElemento (lhidrantes, i);
+    for (int i = 0; i < getTamAtual (listaHidrantes); i++){
+        Elemento hidrante = getElemento (listaHidrantes, i);
         if ((distanciaEuclidiana (getXHid (hidrante), getYHid (hidrante), x, y)) <= r){
             fprintf (arqTXT, "%d - %s\n", j, getIDHid(hidrante));
             Forma circulo = criaForma (" ", 'x', getXHid (hidrante) + 5, getYSema (hidrante) + 5 , 11, x, y, "orange", "none", "6");
-            inserirElemento (lextra, circulo);
+            inserirElemento (listaExtra, circulo);
             j++;
         }
     }
     fprintf (arqTXT, "\n");
 
-    for (int i = 0; i < getTamAtual (lsemaforos); i++){
+    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
         free (distSemaforos[i]);
     }
     free (distSemaforos);
 }
 
-void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista lsemaforos, Lista lextra, FILE * arqSVG, FILE * arqTXT)
+void consultaFS (int k, char* cep, char face, double num, Lista listaQuadras, Lista listaSemaforos, Lista listaExtra, FILE * arqSVG, FILE * arqTXT)
 {
     double x, y;
-    Quadra quadra = encontrarElemento (lquadras, cep);
+    Quadra quadra = encontrarElemento (listaQuadras, cep);
 
     if ((face == 'N') || (face == 'n')){  
         x = getXQuadra (quadra) + num;
@@ -493,13 +516,13 @@ void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista 
     }
 
     Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "green", "blue", "5");
-    inserirElemento (lextra, ponto);
+    inserirElemento (listaExtra, ponto);
 
-    DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (lsemaforos) * sizeof(DistImp));
+    DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (listaSemaforos) * sizeof(DistImp));
     int cont = 0;
 
-    for (int i = 0; i < getTamAtual (lsemaforos); i++){
-        Semaforo semaforo = getElemento (lsemaforos, i);
+    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
+        Semaforo semaforo = getElemento (listaSemaforos, i);
         DistImp s = malloc(sizeof(struct stDist));
         s->elemento = semaforo;
         s->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
@@ -507,27 +530,27 @@ void consultaFS (int k, char* cep, char face, double num, Lista lquadras, Lista 
         cont++;
     }
 
-    min_heap_sort((void *) distSemaforos, getTamAtual (lsemaforos) - 1, k);
-    inverterVetor ((void *) distSemaforos, getTamAtual (lsemaforos));
+    min_heap_sort((void *) distSemaforos, getTamAtual (listaSemaforos) - 1, k);
+    inverterVetor ((void *) distSemaforos, getTamAtual (listaSemaforos));
 
     fprintf (arqTXT, "-k Semaforos mais proximos:\n");
     for (int i = 0; i < k; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDSema(((Semaforo) distSemaforos[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXSema (((Semaforo) distSemaforos[i]->elemento)), getYSema (((Semaforo) distSemaforos[i]->elemento)) , 11, x, y, "green", "none", "6");
-        inserirElemento (lextra, circulo);
+        inserirElemento (listaExtra, circulo);
     }
     fprintf (arqTXT, "\n");
 
-    for (int i = 0; i < getTamAtual (lsemaforos); i++){
+    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
         free (distSemaforos[i]);
     }
     free (distSemaforos);
 }
 
-void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista lhidrantes, Lista lextra, FILE * arqSVG, FILE * arqTXT)
+void consultaFH (int k, char* cep, char face, double num, Lista listaQuadras, Lista listaHidrantes, Lista listaExtra, FILE * arqSVG, FILE * arqTXT)
 {
     double x, y;
-    Quadra quadra = encontrarElemento (lquadras, cep);
+    Quadra quadra = encontrarElemento (listaQuadras, cep);
 
     if ((face == 'N') || (face == 'n')){  
         x = getXQuadra (quadra) + num;
@@ -547,13 +570,13 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
     }
 
     Forma ponto = criaForma (" ", 'c', x, y, 20, 0, 0, "pink", "yellow", "5");
-    inserirElemento (lextra, ponto);
+    inserirElemento (listaExtra, ponto);
 
-    DistImp *distHidrantes = (DistImp *) malloc(getTamAtual (lhidrantes) * sizeof(DistImp));
+    DistImp *distHidrantes = (DistImp *) malloc(getTamAtual (listaHidrantes) * sizeof(DistImp));
     int cont = 0;
 
-    for (int i = 0; i < getTamAtual (lhidrantes); i++){
-        Hidrante hidrante = getElemento (lhidrantes, i);
+    for (int i = 0; i < getTamAtual (listaHidrantes); i++){
+        Hidrante hidrante = getElemento (listaHidrantes, i);
         DistImp s = malloc(sizeof(struct stDist));
         s->elemento = hidrante;
         s->dist = distanciaEuclidiana (x, y, getXHid (hidrante), getYSema (hidrante));
@@ -563,41 +586,41 @@ void consultaFH (int k, char* cep, char face, double num, Lista lquadras, Lista 
 
     if (k < 0){
         k = k * -1;
-        min_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, k);
+        min_heap_sort((void *) distHidrantes, getTamAtual (listaHidrantes) - 1, k);
         fprintf (arqTXT, "-k Hidrantes mais proximos: \n");
     }
     else if (k > 0){
-        max_heap_sort((void *) distHidrantes, getTamAtual (lhidrantes) - 1, getTamAtual (lhidrantes) - 1);
+        max_heap_sort((void *) distHidrantes, getTamAtual (listaHidrantes) - 1, getTamAtual (listaHidrantes) - 1);
         fprintf (arqTXT, "-k Hidrantes mais distantes: \n"); 
     }
 
-    inverterVetor ((void *) distHidrantes, getTamAtual (lhidrantes));
+    inverterVetor ((void *) distHidrantes, getTamAtual (listaHidrantes));
     for (int i = 0; i < k; i++){
         fprintf (arqTXT, "%d - %s\n", i + 1, getIDHid(((Hidrante) distHidrantes[i]->elemento)));   
         Forma circulo = criaForma (" ", 'x', getXHid (((Semaforo) distHidrantes[i]->elemento)) + 5, getYHid (((Semaforo) distHidrantes[i]->elemento)) + 5, 11, x, y, "pink", "none", "6");
-        inserirElemento (lextra, circulo);
+        inserirElemento (listaExtra, circulo);
     }
     fprintf (arqTXT, "\n");
 
-    for (int i = 0; i < getTamAtual (lhidrantes); i++){
+    for (int i = 0; i < getTamAtual (listaHidrantes); i++){
         free (distHidrantes[i]);
     }
     free (distHidrantes);
 
 }
 
-void consultaBRL (double x, double y, Lista lpredios, Lista lmuros, FILE * arqSVG)
+void consultaBRL (double x, double y, Lista listaPredios, Lista listaMuros, FILE * arqSVG)
 {
-    Segmento segmentos = criaSegmentos (getTamAtual (lmuros) + (4* getTamAtual (lpredios)));
+    Segmento segmentos = criaSegmentos (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)));
     int tam = 0;
     
-    for (int i = 0; i < getTamAtual (lmuros); i++){
-        Muro muro = getElemento (lmuros, i);
+    for (int i = 0; i < getTamAtual (listaMuros); i++){
+        Muro muro = getElemento (listaMuros, i);
         inserirSegmento (segmentos, &tam, getX1Muro (muro), getY1Muro (muro), getX2Muro (muro), getY2Muro (muro)); 
     }
 
-    for (int i = 0; i < getTamAtual (lpredios); i++){
-        Predio predio = getElemento (lpredios, i);
+    for (int i = 0; i < getTamAtual (listaPredios); i++){
+        Predio predio = getElemento (listaPredios, i);
         double xp = getXPredio (predio);
         double yp = getYPredio (predio);
 

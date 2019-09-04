@@ -15,11 +15,11 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 		
 	fprintf (arqsvg, "<svg>\n");
 
-	char tipo [10], barraN, texto[500], cep[50], cor1[24], cor2[24], id[50], c1q[24], c2q[24],
+	char tipo [10], barraN, face, texto[500], cep[50], cor1[24], cor2[24], id[50], c1q[24], c2q[24],
 	c1h[24], c2h[24], c1t[24], c2t[24], c1s[24], c2s[24];
 	char swq[20], swh[20], swt[20], sws[20], swc[20], swr[20];
-	int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000;
-	double x, y, w, h, r;
+	int nx = 1000, nq = 1000, nh = 1000, ns = 1000, nr = 1000, np = 1000, nm = 1000;
+	double x, y, w, h, r, num, f, p, mrg, x1, y1, x2, y2;
 
 	//Atribui cores default
 	strcpy (c1q, "blue");
@@ -44,13 +44,8 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 	Hidrante hidrante;
 	Semaforo semaforo;
 	RadioBase radioBase;
-	
-	//Listas
-	Lista listaFormas;
-	Lista listaQuadra;
-	Lista listaHid;
-	Lista listaSema;
-	Lista listaRB;
+	Predio predio;
+	Muro muro;
 
 	while (1){
 		fscanf (arqGeo, "%s", tipo);
@@ -69,11 +64,13 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 		}
 	}
 
-	listaFormas = iniciaLista (nx);
-	listaQuadra = iniciaLista (nq);
-	listaHid = iniciaLista (nh);
-	listaSema = iniciaLista (ns);
-	listaRB = iniciaLista (nr);
+	Lista listaFormas = iniciaLista (nx);
+	Lista listaQuadra = iniciaLista (nq);
+	Lista listaHidrantes = iniciaLista (nh);
+	Lista listaSemaforos = iniciaLista (ns);
+	Lista listaRadiosBase = iniciaLista (nr);
+	Lista listaMuross = iniciaLista (np);
+	Lista listaMuro = iniciaLista (nm);
 
 	rewind (arqGeo);
 	
@@ -132,7 +129,7 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 			fscanf (arqGeo, "%lf", &y);
 
 			hidrante = criaHidrante (id, x, y, c1h, c2h, swh);
-			inserirElemento (listaHid, hidrante);
+			inserirElemento (listaHidrantes, hidrante);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -143,7 +140,7 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 			fscanf (arqGeo, "%lf", &y);
 
 			semaforo = criaSemaforo (id, x, y, c1s, c2s, sws);
-			inserirElemento (listaSema, semaforo);
+			inserirElemento (listaSemaforos, semaforo);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -154,7 +151,56 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 			fscanf (arqGeo, "%lf", &y);
 
 			radioBase = criaRadioBase (id, x, y, c1t, c2t, swt);
-			inserirElemento (listaRB, radioBase);
+			inserirElemento (listaRadiosBase, radioBase);
+
+			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
+		}
+
+		else if (strcmp (tipo, "prd") == 0){
+			fscanf (arqGeo, "%s %c", cep, &face);
+			//fscanf (arqGeo, "%c", &face);
+			fscanf (arqGeo, "%lf", &num);
+			fscanf (arqGeo, "%lf", &f);
+			fscanf (arqGeo, "%lf", &p);
+			fscanf (arqGeo, "%lf", &mrg);
+
+			Quadra quadraPredio = encontrarElemento (listaQuadra, cep);
+			double xQ = getXQuadra (quadraPredio);
+			double yQ = getYQuadra (quadraPredio);
+			double hQ = getHQuadra (quadraPredio);
+			double wQ = getWQuadra (quadraPredio);
+
+			if (face == 'N'){
+				 x = xQ + num;
+				 y = ((yQ + hQ)) - mrg - p; 
+			}
+			else if (face == 'S') {
+				x = xQ + num;
+				y = yQ + mrg;
+			}
+			else if (face == 'L'){
+				x = xQ + mrg;
+				y = yQ + num;
+			}
+			else if (face == 'O'){
+				x = ((xQ + wQ)) - mrg - p;
+				y = yQ + num;
+			}
+
+			predio = criaPredio (cep, face, num, f, p , mrg, x, y, hQ, wQ);
+			inserirElemento (listaMuross, predio);
+	
+			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
+		}
+
+		else if (strcmp (tipo, "mur") == 0) {
+			fscanf (arqGeo, "%lf", &x1);
+			fscanf (arqGeo, "%lf", &y1);
+			fscanf (arqGeo, "%lf", &x2);
+			fscanf (arqGeo, "%lf", &y2);
+
+			muro = criaMuro (x1, y1, x2, y2);
+			inserirElemento (listaMuro, muro);
 
 			fscanf (arqGeo, "%c", &barraN); //fscanf para pegar "/n"
 		}
@@ -209,97 +255,19 @@ void leGEO (FILE * arqGeo, char * nomesvg)
 	
 	imprimeListaSVG (listaFormas, arqsvg);
 	imprimeListaSVG (listaQuadra, arqsvg);
-	imprimeListaSVG (listaHid, arqsvg);
-	imprimeListaSVG (listaSema, arqsvg);
-	imprimeListaSVG (listaRB, arqsvg);
+	imprimeListaSVG (listaHidrantes, arqsvg);
+	imprimeListaSVG (listaSemaforos, arqsvg);
+	imprimeListaSVG (listaRadiosBase, arqsvg);
+	imprimeListaSVG (listaMuross, arqsvg);
+	imprimeListaSVG (listaMuro, arqsvg);
 	fprintf (arqsvg, "</svg>\n");
-	printf ("bana");
 
 	desalocarLista (listaFormas, freeForma);
-	desalocarLista (listaHid, freeHidrante);
+	desalocarLista (listaHidrantes, freeHidrante);
 	desalocarLista (listaQuadra, freeQuadra);
-	desalocarLista (listaSema, freeSemaforo);
-	desalocarLista (listaRB, freeRadioBase);
-	
-}
+	desalocarLista (listaSemaforos, freeSemaforo);
+	desalocarLista (listaRadiosBase, freeRadioBase);
+	desalocarLista (listaMuross, freePredio);
+	desalocarLista (listaMuro, freeMuro);
 
-void geoBB (FILE * arqGeo, FILE * nomesvg, Lista lformas, char * cor)
-{
-    char tipo[50], barran, texto[500], cor1[24], cor2[24];
-	char id[50] ,swc[20], swr[20];
-	double x, y, r, w, h, xr, yr, wr, hr, cx, cy, rx, ry;
-
-	//Atribui sw default
-	strcpy (swc, "1");
-	strcpy (swr, "1");
-	
-	Forma circulo;
-	Forma retangulo;
-
-    fprintf (nomesvg, "<svg>\n");
-	rewind (arqGeo);
-
-	//Faz a leitura de todo o .geo 
-	//Printa no svg3 o que a consulta "bb" pede
-    while (1){
-		fscanf (arqGeo, "%s", tipo);
-
-        if (feof(arqGeo)){
-			fprintf (nomesvg, "</svg>");
-			break;
-        }
-
-		else if (strcmp (tipo, "sw") == 0){
-			fscanf (arqGeo, "%s", swc);
-			fscanf (arqGeo, "%s", swr);
-
-			fscanf (arqGeo, "%c", &barran); //fscanf para pegar "/n"
-		}
-
-        if (strcmp (tipo, "c") == 0){
-			fscanf (arqGeo, "%s", id);	
-			fscanf (arqGeo, "%lf", &r);
-			fscanf (arqGeo, "%lf", &x);
-			fscanf (arqGeo, "%lf", &y);
-			fscanf (arqGeo, "%s", cor1);
-			fscanf (arqGeo, "%s", cor2);
-			circulo = criaForma (id, 'c', x, y, r, 0, 0, cor1, cor2, swc);
-			
-			svgprintcircle(circulo, nomesvg);
-
-			//Calculo da largura, altura, x e y do retangulo "bb"
-			hr = 2*getRaioForma (circulo);
-			wr = 2*getRaioForma (circulo);
-			xr = getXForma (circulo) - getRaioForma (circulo);
-			yr = getYForma (circulo) - getRaioForma (circulo);
-
-			retangulo = criaForma ("0", 'r', xr, yr, 0, wr, hr, "none", cor, "1");
-			svgprintrect (retangulo, nomesvg);
-			//svgprintrectBB (xr, yr, wr, hr,cor,  nomesvg);
-
-			fscanf (arqGeo, "%c", &barran); //fscanf para pegar "\n"
-		}
-		else if (strcmp (tipo, "r") == 0){
-			fscanf (arqGeo, "%s", id);
-			fscanf (arqGeo, "%lf", &w);	
-			fscanf (arqGeo, "%lf", &h);
-			fscanf (arqGeo, "%lf", &x);	
-			fscanf (arqGeo, "%lf", &y);
-			fscanf (arqGeo, "%s", cor1);
-			fscanf (arqGeo, "%s", cor2);
-			retangulo = criaForma (id, 'r', x, y, 0, w, h, cor1, cor2, swr);
-			
-			svgprintrect(retangulo, nomesvg);
-
-			//Calculo do (centro x, centroy), do raio x e do raio y da elipse "bb"
-			cx = getXForma (retangulo) + getWForma (retangulo)/2.0;
-			cy = getYForma (retangulo) + getHForma (retangulo)/2.0;
-			ry = getHForma (retangulo)/2;
-			rx = getWForma (retangulo)/2;
-
-			svgprintellipse(cx, cy, rx, ry, cor, nomesvg);
-
-			fscanf (arqGeo, "%c", &barran); //fscanf para pegar  "\n"
-        }
-    }
 }

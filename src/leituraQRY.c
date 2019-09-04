@@ -3,8 +3,8 @@
 #include"lista.h"
 #include"utils.h"
 
-void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista Lformas, Lista Lquadra, Lista LHidrante,
-Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
+void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista listaFormas, Lista listaQuadras, Lista listaHidrantes,
+Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredios, Lista listaExtra)
 {   
     char cond[20], metrica[5], aux, strtexto[50], sufixo[20], cor[24], cstrk[24], cep [32], face;
     char j[20], k[20];
@@ -24,7 +24,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf(nomearq, "%s", k);
 
             fprintf(nometxt, "d? %s %s\n", j, k);
-            consultaD (j, k, Lformas,nometxt, nomesvg);
+            consultaD (j, k, listaFormas,nometxt, nomesvg);
             
             fscanf(nomearq, "%c", &aux);
         }
@@ -34,7 +34,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%s", k);
 
             fprintf(nometxt, "o? %s %s\n", j, k);
-            consultaO (j, k, Lformas, nometxt, nomesvg);
+            consultaO (j, k, listaFormas, nometxt, nomesvg);
             
             fscanf(nomearq, "%c", &aux); 
         }
@@ -45,7 +45,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &y);
 
             fprintf (nometxt, "i? %s %lf %lf\n", j, x, y);
-            consultaI (j, x, y, Lformas, nometxt, nomesvg);
+            consultaI (j, x, y, listaFormas, nometxt, nomesvg);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -54,7 +54,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%s", sufixo);
             fscanf (nomearq, "%s", cor);
 
-            consultaBB (sufixo, cor, svgBB,Lformas, nomegeo);
+            consultaBB (sufixo, cor, svgBB,listaFormas, nomegeo);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -63,7 +63,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%s", j);
 
             fprintf (nometxt, "crd? %s\n", j);            
-            consultaCRD (j, Lquadra, LHidrante, Lsemaforo, LRadio, nometxt);
+            consultaCRD (j, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -72,7 +72,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%s", j);
 
             fprintf (nometxt, "del %s\n", j);
-            consultaDEL (j, Lquadra, LHidrante, Lsemaforo, LRadio, nometxt);
+            consultaDEL (j, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -84,7 +84,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%s", cstrk);
 
             fprintf (nometxt, "cbq %lf %lf %lf %s\n", x, y, r, cstrk);
-            consultaCBQ (x, y, r, cstrk, Lquadra, nometxt);
+            consultaCBQ (x, y, r, cstrk, listaQuadras, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -98,7 +98,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq ,"%lf", &dy);
 
             fprintf (nometxt, "trns %lf %lf %lf %lf %lf %lf\n",x, y, w, h, dx, dy);
-            consultaTRNS (x, y, w, h, dx, dy, Lquadra, LHidrante, Lsemaforo, LRadio, nometxt);
+            consultaTRNS (x, y, w, h, dx, dy, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -109,7 +109,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &dist);
 
             fprintf (nometxt, "dq %s %s %lf\n", metrica, j, dist);
-            consultaDQ (j, metrica, dist, Lquadra, LHidrante, Lsemaforo, LRadio, nometxt, nomesvg);
+            consultaDQ (j, metrica, dist, listaQuadras, listaHidrantes, listaSemaforos, listaRadiosBase, nometxt, nomesvg);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -121,7 +121,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &r);
 
             fprintf (nometxt, "fi %lf %lf %d %lf\n", x, y, ns, r);
-            consultaFI (x, y, ns, r, LHidrante, Lsemaforo, Lextra, nomesvg, nometxt);
+            consultaFI (x, y, ns, r, listaHidrantes, listaSemaforos, listaExtra, nomesvg, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -132,7 +132,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &num);
 
             fprintf (nometxt, "fs %d %s %c %lf\n",ki, cep, face, num);
-            consultaFS (ki, cep, face, num, Lquadra, Lsemaforo, Lextra, nomesvg, nometxt);
+            consultaFS (ki, cep, face, num, listaQuadras, listaSemaforos, listaExtra, nomesvg, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -143,7 +143,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &num);
 
             fprintf (nometxt, "fh %d %s %c %lf\n", ki, cep, face, num);
-            consultaFH (ki, cep, face, num, Lquadra, LHidrante, Lextra, nomesvg, nometxt);
+            consultaFH (ki, cep, face, num, listaQuadras, listaHidrantes, listaExtra, nomesvg, nometxt);
 
             fscanf (nomearq, "%c", &aux);
         }
@@ -151,7 +151,7 @@ Lista Lsemaforo, Lista LRadio, Lista Lmuros, Lista Lpredios, Lista Lextra)
             fscanf (nomearq, "%lf", &x);
             fscanf (nomearq, "%lf", &y);
 
-            consultaBRL (x, y, Lpredios, Lmuros, nomesvg);
+            consultaBRL (x, y, listaPredios, listaMuros, nomesvg);
 
             fscanf (nomearq, "%c", &aux); 
         }
