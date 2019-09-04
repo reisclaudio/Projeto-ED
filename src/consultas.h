@@ -11,6 +11,8 @@
 #include"heapsort.h"
 #include"segmentos.h"
 
+typedef void* Dist;
+
 /* Funcao que realiza a consulta "d?" do .qry */
 void consultaD (char* j, char* k,Lista lformas, FILE * nometxt, FILE * nomesvg);
 /* Funcao que realiza a consulta "o?" do .qry */ 

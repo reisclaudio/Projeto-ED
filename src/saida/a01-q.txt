@@ -4,31 +4,6 @@ NAO
 crd? b05.4
 Quadra x = 430.000000 y = 405.000000 w = 120.000000 h = 80.000000
 
-fi 10.000000 10.000000 10 100.000000
--ns Semaforos alterados:
-1 - sfb01.2
-2 - sfb02.2
-3 - sfb03.1
-4 - sfb03.2
-5 - sfb01.3
-6 - sfb04.1
-7 - sfb02.3
-8 - sfb04.2
-9 - sfb04.3
-10 - sfb01.4
--Hidrantes ativados:
-1 - hneb01.1
-
-fh 10 b02.4 s 5.000000
--k Hidrantes mais distantes: 
-1 - hneb05.1
-2 - hnb05.1
-3 - hneb04.1
-4 - hnob05.1
-5 - hneb05.2
-6 - hneb03.1
-7 - hnob05.5
-8 - hnb04.1
-9 - hob05.1
-10 - hnb05.2
+d? 1 2
+6.500000
 

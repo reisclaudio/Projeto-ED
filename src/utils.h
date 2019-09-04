@@ -10,6 +10,8 @@
 #include"lista.h"
 #include"heapsort.h"
 
+typedef void* Dist;
+
 double distanciaEuclidiana (double x1, double y1, double x2, double y2);
 double manhattanDistance (double x1, double y1, double x2, double y2);
 double clamp (double pc, double pmi, double pma);
