@@ -15,6 +15,17 @@ struct StVertice{
 typedef struct StSegmento *SegmentoImp;
 typedef struct StVertice *VerticeImp;
 
+Segmento criaSegmento (double x1, double y1, double x2, double y2){
+    SegmentoImp s = (SegmentoImp) malloc (sizeof (struct StSegmento));
+
+    s->x1 = x1;
+    s->y1 = y1;
+    s->x2 = x2;
+    s->y2 = y2;
+
+    return s;
+}
+
 Segmento criaSegmentos (int capacidade)
 {
     SegmentoImp *segmentos = (SegmentoImp *) malloc (capacidade * sizeof (SegmentoImp));
@@ -123,4 +134,47 @@ void sortVertices (Vertice v, int tamanho)
     qsort (vertices, tamanho, sizeof (VerticeImp), cmpVertices);
 }
 
+bool intersecSegmentos (Segmento s1, Segmento s2, double* x, double* y){
+    SegmentoImp segmento1 = (SegmentoImp) s1;
+    SegmentoImp segmento2 = (SegmentoImp) s2;
+    double aX = segmento1->x1;
+    double aY = segmento1->y1;
+    double bX = segmento1->x2;
+    double bY = segmento1->y2;
 
+    double cX = segmento2->x1;
+    double cY = segmento2->y1;
+    double dX = segmento2->x2;
+    double dY = segmento2->y2;
+
+    double  distAB, theCos, theSin, newX, ABpos;
+
+    if (((aX == bX) && (aY == bY)) || ((cX == dX) && (cY == dY))) return false;
+
+    bX = bX - aX;
+    bY = bY - aY;
+    cX = cX - aX;
+    cY = cY - aY;
+    dX = dX - aX;
+    dY = dY - aY;
+
+    distAB = sqrt (bX*bX+bY*bY);
+
+    theCos = bX/distAB;
+    theSin = bY/distAB;
+    newX = cX*theCos + cY*theSin;
+    cY = cY*theCos - cX*theSin;
+    cX = newX;
+    newX = dX*theCos+dY*theSin;
+    dY = dY*theCos-dX*theSin;
+    dX = newX;
+
+    if (cY == dY) return false;
+
+    ABpos = dX + (cX-dX) + dY/(dY-cY);
+
+    *x = aX+ABpos*theCos;
+    *y = aY+ABpos*theSin;
+
+    return true;
+}

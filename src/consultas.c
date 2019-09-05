@@ -613,6 +613,7 @@ void consultaBRL (double x, double y, Lista listaPredios, Lista listaMuros, FILE
 {
     Segmento segmentos = criaSegmentos (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)));
     int tam = 0;
+    double xama1 = 0, xama2 = 0;
     
     for (int i = 0; i < getTamAtual (listaMuros); i++){
         Muro muro = getElemento (listaMuros, i);
@@ -632,7 +633,15 @@ void consultaBRL (double x, double y, Lista listaPredios, Lista listaMuros, FILE
 
     Vertice vertices = criaVertices (x, y, (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)))*2, segmentos, tam, arqSVG);
     sortVertices (vertices, tam);
-    
+
+    Segmento s1 = criaSegmento (0, 0, 11, 11);
+    Segmento s2 = criaSegmento (0, 11, 11, 0);
+    bool lala = intersecSegmentos (s1, s2, &xama1, &xama2);
+
+    if (lala){
+        printf ("%lf %lf\n", xama1 - 0.353553, xama2 - 0.353553
+);
+    }
 
     imprimeSegmentos (segmentos,tam, arqSVG);
     freeSegmentos (segmentos, tam);
