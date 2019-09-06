@@ -197,6 +197,8 @@ int getPrimeiro (Lista lista)
 {
     ListaImp aux = (ListaImp) lista;
 
+    if(!aux->tamAtual) return NULO;
+
     return aux->inicio;
 }
 
@@ -204,7 +206,6 @@ int getProximo (Lista lista, int posic)
 {   
     ListaImp aux = (ListaImp) lista;
 
-    if (posic == aux->tamAtual) return NULO;
     return aux->v[posic].prox;
 }
 
@@ -263,6 +264,12 @@ void desalocarLista (Lista lista, void (*freeElemento)(Elemento elemento)){
             freeElemento (aux->v[aux->v[i].ant].elemento);
         }
     }
+}
+
+int getNulo()
+{
+
+    return NULO;
 }
 
 

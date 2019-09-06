@@ -46,5 +46,7 @@ int getAnterior (Lista lista, int posic);
 void imprimeListaSVG (Lista lista, FILE* arqSVG);
 /* Funcao que desaloca a lista */
 void desalocarLista (Lista lista, void (*destruirElemento)(Elemento elemento));
+int getNulo();
+
 
 #endif

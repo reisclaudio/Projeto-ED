@@ -452,15 +452,16 @@ void consultaFI (double x, double y, int ns, double r, Lista listaHidrantes, Lis
     inserirElemento (listaExtra, foco);
 
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (listaSemaforos) * sizeof(DistImp));
+
     int cont = 0;
     int tam = getTamAtual (listaHidrantes);
 
     for (int i = 0; i < getTamAtual (listaSemaforos); i++){
         semaforo = getElemento (listaSemaforos, i);
-        DistImp s = malloc(sizeof(struct stDist));
-        s->elemento = semaforo;
-        s->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
-        distSemaforos[cont] = s;
+        
+        distSemaforos[cont] = malloc(sizeof(struct stDist));
+        distSemaforos[cont]->elemento = semaforo;
+        distSemaforos[cont]->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
         cont++;
     }
 
@@ -491,6 +492,7 @@ void consultaFI (double x, double y, int ns, double r, Lista listaHidrantes, Lis
         free (distSemaforos[i]);
     }
     free (distSemaforos);
+    printf ("%d\n", getTamAtual (listaSemaforos));
 }
 
 void consultaFS (int k, char* cep, char face, double num, Lista listaQuadras, Lista listaSemaforos, Lista listaExtra, FILE * arqSVG, FILE * arqTXT)
@@ -577,10 +579,10 @@ void consultaFH (int k, char* cep, char face, double num, Lista listaQuadras, Li
 
     for (int i = 0; i < getTamAtual (listaHidrantes); i++){
         Hidrante hidrante = getElemento (listaHidrantes, i);
-        DistImp s = malloc(sizeof(struct stDist));
-        s->elemento = hidrante;
-        s->dist = distanciaEuclidiana (x, y, getXHid (hidrante), getYSema (hidrante));
-        distHidrantes[cont] = s;
+
+        distHidrantes[cont] = malloc(sizeof(struct stDist));
+        distHidrantes[cont]->elemento = hidrante;
+        distHidrantes[cont]->dist = distanciaEuclidiana (x, y, getXHid (hidrante), getYSema (hidrante));
         cont++;
     }
 

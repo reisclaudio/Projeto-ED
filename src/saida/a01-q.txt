@@ -1,9 +1,9 @@
-o? 1 2
-NAO
+crd? sfb03.1
+Semaforo x = 17.500000 y = 207.500000
 
-crd? b05.4
-Quadra x = 430.000000 y = 405.000000 w = 120.000000 h = 80.000000
+del sfb03.1
+Semaforo x = 17.500000 y = 207.500000
 
-d? 1 2
-6.500000
+crd? sfb03.1
+Elemento nao encontrado!
 
