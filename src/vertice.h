@@ -15,7 +15,7 @@ Vertice criaVertice (Ponto p, double xB, double yB);
 Ponto getVVertice (Vertice vertice);
 double getDistVertice (Vertice vertice);
 double getAnguloVertice (Vertice vertice);
-Segmento getSegmentoVertice(Vertice vertice)
+Segmento getSegmentoVertice(Vertice vertice);
 bool getStartVertice (Vertice vertice);
 void setSegmentoVertice (Vertice vertice, Segmento segmento);
 void setStartVertice (Vertice vertice, bool start);

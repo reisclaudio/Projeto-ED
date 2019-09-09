@@ -15,6 +15,8 @@
 #include"./Elementos/predio.h"
 #include"./Elementos/muro.h"
 
+typedef void * Vertice;
+
 /* Funcao que printa um circulo nos arquivos .svg */
 void svgprintcircle (Forma forma, FILE * arqSVG);
 /* Funcao que printa um retangulo nos arquivos .svg */

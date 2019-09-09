@@ -77,13 +77,14 @@ Segmento buscarSegmentoFormadoComVertice(double xc, double yc, Vertice v, Ponto 
 	}
 
 	// ver como vou dar free dps
-    Vertice vc = createVertex(createPoint(xc, yc), xc, yc);
-    Vertice vq = createVertex(createPoint(xq, yq), xc, yc);
+    Vertice vc = criaVertice(criaPonto(xc, yc), xc, yc);
+    Vertice vq = criaVertice(criaPonto(xq, yq), xc, yc);
 
 	return criaSegmento(vc, vq);
 }
 
 void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista listaPredios, int *size, FILE * arqSVG){
+    printf ("sama\n");
     Segmento *segmentos = (Segmento *) malloc (capacidade * sizeof (Segmento));
 
     Ponto pMin = criaPonto (x,y);
@@ -277,12 +278,15 @@ void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista list
     int tamanhoVertices = index;
     qsort (vertices, tamanhoVertices, sizeof (Vertice), cmpVertices);
     Lista segmentosAtivos = iniciaLista ((int) tamanhoVertices / 2);
-    Vertice biombo = criaVertice(criaPonto(getxPOnto(getVVertice(vertices[0])), getYPonto(getVVertice(vertices[0]))), x, y);
+    
+    Vertice biombo = criaVertice(criaPonto(getXPonto(getVVertice(vertices[0])), getYPonto(getVVertice(vertices[0]))), x, y);
     setSegmentoVertice (biombo, getSegmentoVertice (vertices[0]));
+
 
     for (int i = 0; i < tamanhoVertices; i++){
         Vertice v = vertices[i];
         Segmento sv = getSegmentoVertice (v);
+        printf ("%lf\n", getDistVertice (getV1Segmento (sv)));
         Segmento s_v = buscarSegmentoFormadoComVertice (x, y, v, pMin, pMax);
         Segmento segmentoFechado = NULL;
 
@@ -303,12 +307,13 @@ void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista list
                     segmentoFechado = s;
                 }
             }
-        }
+        } 
 
         if (getStartVertice (v)){
+            inserirElemento (segmentosAtivos, sv); 
             bool ehSegmentoFechado;
 
-            if (distanciaEuclidiana (x, y, getxPOnto (getVVertice (v)), getYPonto (getVVertice (v))) < dMin)
+            if (distanciaEuclidiana (x, y, getXPonto (getVVertice (v)), getYPonto (getVVertice (v))) < dMin)
                 ehSegmentoFechado = true;
             else
                 ehSegmentoFechado = false;
@@ -324,9 +329,11 @@ void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista list
                 svgprintTriangulo (x, y, biombo, vInter, arqSVG);
 
                 biombo = v;
-            } 
-            inserirElemento (segmentosAtivos, sv);  
+            }  
         }
+    }
+        /*
+        
         else {
             bool ehSegmentoFechado;
 
@@ -391,5 +398,4 @@ void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista list
     free(segmentos);
     free (vertices);
 */
-
 }
