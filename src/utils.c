@@ -137,3 +137,49 @@ void inverterVetor (Dist vet[], int tamanhoVetor){
     }
 }
 
+bool checkLeftTurn(Ponto a, Ponto b, Ponto c)
+{
+	double s = (getXPonto(a) * getYPonto(b) - getYPonto(a) * getXPonto(b) + getYPonto(a) * getXPonto(c) - getXPonto(a) * getYPonto(c) + 
+					  getXPonto(b) * getYPonto(c) - getYPonto(b) * getXPonto(c)) / 2;
+	return s <= 0;
+}
+
+bool checkInterseccaoSegmentos (Segmento s1, Segmento s2)
+{
+	if(s1 == NULL || s2 == NULL) return false;
+	
+	Segmento a = getVVertice(getV1Segmento(s1));
+	Segmento b = getVVertice(getV2Segmento(s1));
+
+	Segmento c = getVVertice(getV1Segmento(s2));
+	Segmento d = getVVertice(getV2Segmento(s2));
+
+	return (checkLeftTurn(c, d, a) ^ checkLeftTurn(c, d, b)) &&
+	 		(checkLeftTurn(a, b, c) ^ checkLeftTurn(a, b, d));
+}
+
+void interseccaoSegmentos (Segmento s1, Segmento s2, double *x, double *y)
+{
+    double m1, m2, c1, c2;
+
+    Ponto s1v1 = getVVertice(getV1Segmento(s1));
+    Ponto s1v2 = getVVertice(getV2Segmento(s1));
+    Ponto s2v1 = getVVertice(getV1Segmento(s2));
+    Ponto s2v2 = getVVertice(getV2Segmento(s2));
+
+    m1 = (getYPonto(s1v2) - getYPonto(s1v1)) / (getXPonto(s1v2) - getXPonto(s1v1));
+    c1 = getYPonto(s1v1) - m1 * getXPonto(s1v1);
+
+    m2 = (getYPonto(s2v2) - getYPonto(s2v1)) / (getXPonto(s2v2) - getXPonto(s2v1));
+    c2 = getYPonto(s2v1) - m2 * getXPonto(s2v1);
+
+    if(m1 - m2 == 0){
+        printf("Retas nao se cruzam!\n");
+    }
+    else{
+        *x = (c2 - c1) / (m1 - m2);
+        *y = m1 * (*x) + c1;
+    }
+}
+
+

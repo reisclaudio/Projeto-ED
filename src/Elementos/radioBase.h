@@ -1,5 +1,6 @@
 #ifndef RADIOBASE__H
 #define RADIOBASE__H
+//Funcoes que fazem procedimentos referentes a uma radio base
 
 #include<stdio.h>
 #include<stdlib.h>

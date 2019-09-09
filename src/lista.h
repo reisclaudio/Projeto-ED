@@ -6,7 +6,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdbool.h>
-#include"arquivos.h"
+#include"svgprint.h"
 
 //TAD LISTA
 typedef void *Elemento;
@@ -46,6 +46,7 @@ int getAnterior (Lista lista, int posic);
 void imprimeListaSVG (Lista lista, FILE* arqSVG);
 /* Funcao que desaloca a lista */
 void desalocarLista (Lista lista, void (*destruirElemento)(Elemento elemento));
+/* Funcao que retorna -1 (NULO) */
 int getNulo();
 
 

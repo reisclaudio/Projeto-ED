@@ -1,9 +1,0 @@
-crd? sfb03.1
-Semaforo x = 17.500000 y = 207.500000
-
-del sfb03.1
-Semaforo x = 17.500000 y = 207.500000
-
-crd? sfb03.1
-Elemento nao encontrado!
-

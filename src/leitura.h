@@ -8,7 +8,8 @@
 #include<stdbool.h>
 #include<math.h>
 #include"lista.h"
-#include"segmentos.h"
+#include"segmento.h"
+#include"bomba.h"
 
 /* Principal funcao do codigo, recebe varios parametros para alimentar outras funcoes */
 void leArquivos (FILE * arqGeo,FILE * arqQry, char * nomesvg, char * nometxt, char * nomesvg2);

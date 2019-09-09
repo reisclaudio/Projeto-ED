@@ -1,5 +1,6 @@
 #ifndef FORMA__H
 #define FORMA__H
+//Funcoes que fazem procedimentos referentes a uma forma (circulo ou retangulo)
 
 #include<stdio.h>
 #include<stdlib.h>

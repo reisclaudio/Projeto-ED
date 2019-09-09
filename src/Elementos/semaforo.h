@@ -1,5 +1,6 @@
 #ifndef SEMAFORO__H
 #define SEMAFORO__H
+//Funcoes que fazem procedimentos referentes a um semaforo
 
 #include<stdio.h>
 #include<stdlib.h>

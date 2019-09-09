@@ -1,5 +1,6 @@
 #ifndef QUADRA__H
 #define QUADRA__H
+//Funcoes que fazem procedimentos referentes a uma quadra
 
 #include<stdio.h>
 #include<stdlib.h>

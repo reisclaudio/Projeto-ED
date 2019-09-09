@@ -1,31 +1,68 @@
-#include"segmentos.h"
+#include"segmento.h"
 
 #define PI 3.14159265
 
 struct StSegmento {
-    double x1, y1, x2, y2;
+    Vertice v1;
+    Vertice v2;
 };
-
-struct StVertice{
-    double x, y, angulo, dist;
-    bool start;
-    Segmento segmento;
-};
-
 typedef struct StSegmento *SegmentoImp;
-typedef struct StVertice *VerticeImp;
 
-Segmento criaSegmento (double x1, double y1, double x2, double y2){
-    SegmentoImp s = (SegmentoImp) malloc (sizeof (struct StSegmento));
+Segmento criaSegmento (Vertice v1, Vertice v2)
+{
+    SegmentoImp segmento = (SegmentoImp) malloc (sizeof (struct StSegmento));
 
-    s->x1 = x1;
-    s->y1 = y1;
-    s->x2 = x2;
-    s->y2 = y2;
+    segmento->v1 = v1;
+    segmento->v2 = v2;
 
-    return s;
+    return segmento;
 }
 
+Vertice getV1Segmento (Segmento segmento)
+{
+    SegmentoImp s;
+    s = (SegmentoImp) segmento;
+    return s->v1;
+}
+
+Vertice getV2Segmento (Segmento segmento)
+{
+    SegmentoImp s;
+    s = (SegmentoImp) segmento;
+    return s->v2;
+}
+
+void setSegmentoStartVertice (Segmento segmento)
+{
+    SegmentoImp s;
+    s = (SegmentoImp) segmento;
+
+    if (getAnguloVertice (s->v1) < getAnguloVertice (s->v2)){
+        setStartVertice (s->v1, true);
+        setStartVertice (s->v2, false);
+    }
+    else if (getAnguloVertice (s->v2) < getAnguloVertice (s->v1)){
+        setStartVertice (s->v1, false);
+        setStartVertice (s->v2, true);
+    }
+    else if (getDistVertice (s->v1) < getDistVertice (s->v2)){
+        setStartVertice (s->v1, true);
+        setStartVertice (s->v2, false);
+    }
+    else {
+        setStartVertice (s->v1, false);
+        setStartVertice (s->v2, true);
+    } 
+}
+
+void freeSegmento (Segmento segmento)
+{
+    SegmentoImp s;
+    s = (SegmentoImp) segmento;
+    free (s);
+}
+
+/*
 Segmento criaSegmentos (int capacidade)
 {
     SegmentoImp *segmentos = (SegmentoImp *) malloc (capacidade * sizeof (SegmentoImp));
@@ -134,47 +171,4 @@ void sortVertices (Vertice v, int tamanho)
     qsort (vertices, tamanho, sizeof (VerticeImp), cmpVertices);
 }
 
-bool intersecSegmentos (Segmento s1, Segmento s2, double* x, double* y){
-    SegmentoImp segmento1 = (SegmentoImp) s1;
-    SegmentoImp segmento2 = (SegmentoImp) s2;
-    double aX = segmento1->x1;
-    double aY = segmento1->y1;
-    double bX = segmento1->x2;
-    double bY = segmento1->y2;
-
-    double cX = segmento2->x1;
-    double cY = segmento2->y1;
-    double dX = segmento2->x2;
-    double dY = segmento2->y2;
-
-    double  distAB, theCos, theSin, newX, ABpos;
-
-    if (((aX == bX) && (aY == bY)) || ((cX == dX) && (cY == dY))) return false;
-
-    bX = bX - aX;
-    bY = bY - aY;
-    cX = cX - aX;
-    cY = cY - aY;
-    dX = dX - aX;
-    dY = dY - aY;
-
-    distAB = sqrt (bX*bX+bY*bY);
-
-    theCos = bX/distAB;
-    theSin = bY/distAB;
-    newX = cX*theCos + cY*theSin;
-    cY = cY*theCos - cX*theSin;
-    cX = newX;
-    newX = dX*theCos+dY*theSin;
-    dY = dY*theCos-dX*theSin;
-    dX = newX;
-
-    if (cY == dY) return false;
-
-    ABpos = dX + (cX-dX) + dY/(dY-cY);
-
-    *x = aX+ABpos*theCos;
-    *y = aY+ABpos*theSin;
-
-    return true;
-}
+*/

@@ -1,5 +1,6 @@
 #ifndef HIDRANTE__H
 #define HIDRANTE__H
+//Funcoes que fazem procedimentos referentes a um hidrante
 
 #include<stdio.h>
 #include<stdlib.h>

@@ -1,4 +1,5 @@
 #include"leitura.h"
+#include"svgprint.h"
 #include"arquivos.h"
 #include"lista.h"
 #include"./Elementos/forma.h"

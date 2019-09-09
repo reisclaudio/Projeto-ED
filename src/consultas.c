@@ -1,4 +1,5 @@
 #include"consultas.h"
+#include"svgprint.h"
 #include"arquivos.h"
 #include"lista.h"
 #include"utils.h"
@@ -447,18 +448,16 @@ Elemento getCep (Dist distAux){
 void consultaFI (double x, double y, int ns, double r, Lista listaHidrantes, Lista listaSemaforos, Lista listaExtra,  FILE * arqSVG, FILE * arqTXT)
 {
     double dist;
-    Semaforo semaforo;
     Forma foco = criaForma (" ", 'c', x, y, 20, 0, 0, "orange", "red", "5");
     inserirElemento (listaExtra, foco);
 
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (listaSemaforos) * sizeof(DistImp));
 
     int cont = 0;
-    int tam = getTamAtual (listaHidrantes);
 
-    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
-        semaforo = getElemento (listaSemaforos, i);
-        
+    for (int i = getPrimeiro (listaSemaforos); i != getNulo (); i = getProximo (listaSemaforos, i)){        
+        Elemento semaforo = getElemento (listaSemaforos, i);    
+
         distSemaforos[cont] = malloc(sizeof(struct stDist));
         distSemaforos[cont]->elemento = semaforo;
         distSemaforos[cont]->dist = distanciaEuclidiana (x, y, getXSema (semaforo), getYSema (semaforo));
@@ -477,11 +476,13 @@ void consultaFI (double x, double y, int ns, double r, Lista listaHidrantes, Lis
 
     fprintf (arqTXT, "-Hidrantes ativados:\n");
     int j = 1;
-    for (int i = 0; i < getTamAtual (listaHidrantes); i++){
+    
+    for (int i = getPrimeiro (listaHidrantes); i != getNulo (); i = getProximo (listaHidrantes, i)){        
         Elemento hidrante = getElemento (listaHidrantes, i);
+        
         if ((distanciaEuclidiana (getXHid (hidrante), getYHid (hidrante), x, y)) <= r){
             fprintf (arqTXT, "%d - %s\n", j, getIDHid(hidrante));
-            Forma circulo = criaForma (" ", 'x', getXHid (hidrante) + 5, getYSema (hidrante) + 5 , 11, x, y, "orange", "none", "6");
+            Forma circulo = criaForma (" ", 'x', getXHid (hidrante) + 5, getYHid (hidrante) + 5 , 11, x, y, "orange", "none", "6");
             inserirElemento (listaExtra, circulo);
             j++;
         }
@@ -523,7 +524,7 @@ void consultaFS (int k, char* cep, char face, double num, Lista listaQuadras, Li
     DistImp *distSemaforos = (DistImp *) malloc(getTamAtual (listaSemaforos) * sizeof(DistImp));
     int cont = 0;
 
-    for (int i = 0; i < getTamAtual (listaSemaforos); i++){
+    for (int i = getPrimeiro (listaSemaforos); i != getNulo (); i = getProximo (listaSemaforos, i)){     
         Semaforo semaforo = getElemento (listaSemaforos, i);
         DistImp s = malloc(sizeof(struct stDist));
         s->elemento = semaforo;
@@ -577,7 +578,7 @@ void consultaFH (int k, char* cep, char face, double num, Lista listaQuadras, Li
     DistImp *distHidrantes = (DistImp *) malloc(getTamAtual (listaHidrantes) * sizeof(DistImp));
     int cont = 0;
 
-    for (int i = 0; i < getTamAtual (listaHidrantes); i++){
+    for (int i = getPrimeiro (listaHidrantes); i != getNulo (); i = getProximo (listaHidrantes, i)){     
         Hidrante hidrante = getElemento (listaHidrantes, i);
 
         distHidrantes[cont] = malloc(sizeof(struct stDist));
@@ -609,44 +610,6 @@ void consultaFH (int k, char* cep, char face, double num, Lista listaQuadras, Li
     }
     free (distHidrantes);
 
-}
-
-void consultaBRL (double x, double y, Lista listaPredios, Lista listaMuros, FILE * arqSVG)
-{
-    Segmento segmentos = criaSegmentos (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)));
-    int tam = 0;
-    double xama1 = 0, xama2 = 0;
-    
-    for (int i = 0; i < getTamAtual (listaMuros); i++){
-        Muro muro = getElemento (listaMuros, i);
-        inserirSegmento (segmentos, &tam, getX1Muro (muro), getY1Muro (muro), getX2Muro (muro), getY2Muro (muro)); 
-    }
-
-    for (int i = 0; i < getTamAtual (listaPredios); i++){
-        Predio predio = getElemento (listaPredios, i);
-        double xp = getXPredio (predio);
-        double yp = getYPredio (predio);
-
-        inserirSegmento (segmentos, &tam, xp, yp, xp + getFPredio (predio), yp);
-        inserirSegmento (segmentos, &tam, xp, yp, xp, yp + getPPredio (predio));
-        inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp, yp + getPPredio (predio));
-        inserirSegmento (segmentos, &tam, xp + getFPredio (predio), yp + getPPredio (predio), xp + getFPredio (predio), yp);
-    }
-
-    Vertice vertices = criaVertices (x, y, (getTamAtual (listaMuros) + (4* getTamAtual (listaPredios)))*2, segmentos, tam, arqSVG);
-    sortVertices (vertices, tam);
-
-    Segmento s1 = criaSegmento (0, 0, 11, 11);
-    Segmento s2 = criaSegmento (0, 11, 11, 0);
-    bool lala = intersecSegmentos (s1, s2, &xama1, &xama2);
-
-    if (lala){
-        printf ("%lf %lf\n", xama1 - 0.353553, xama2 - 0.353553
-);
-    }
-
-    imprimeSegmentos (segmentos,tam, arqSVG);
-    freeSegmentos (segmentos, tam);
 }
 
 

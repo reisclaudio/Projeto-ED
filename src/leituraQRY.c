@@ -2,6 +2,7 @@
 #include"consultas.h"
 #include"lista.h"
 #include"utils.h"
+#include"bomba.h"
 
 void leQRY (FILE * nomearq,FILE * nomegeo,FILE * nometxt,FILE * nomesvg, char * svgBB, Lista listaFormas, Lista listaQuadras, Lista listaHidrantes,
 Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredios, Lista listaExtra)
@@ -11,6 +12,7 @@ Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredio
     double x, y, w, h, r, num;
     double dx, dy, dist;
     int ns, ki;
+    int vectSize = 0;
     
     while (1){
         fscanf (nomearq, "%s", cond);
@@ -128,7 +130,6 @@ Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredio
         else if (strcmp (cond, "fs") == 0){
             fscanf (nomearq, "%d", &ki);
             fscanf (nomearq, "%s %c", cep, &face);
-            //fscanf (nomearq, "%c", &face);
             fscanf (nomearq, "%lf", &num);
 
             fprintf (nometxt, "fs %d %s %c %lf\n",ki, cep, face, num);
@@ -139,7 +140,6 @@ Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredio
         else if (strcmp (cond, "fh") == 0){
             fscanf (nomearq, "%d", &ki);
             fscanf (nomearq, "%s %c", cep, &face);
-            //fscanf (nomearq, "%c", &face);
             fscanf (nomearq, "%lf", &num);
 
             fprintf (nometxt, "fh %d %s %c %lf\n", ki, cep, face, num);
@@ -151,9 +151,14 @@ Lista listaSemaforos, Lista listaRadiosBase, Lista listaMuros, Lista listaPredio
             fscanf (nomearq, "%lf", &x);
             fscanf (nomearq, "%lf", &y);
 
-            consultaBRL (x, y, listaPredios, listaMuros, nomesvg);
+            Forma circulo = criaForma (" ", 'c', x, y, 5, 0, 0, "black", "red", "2");
+            inserirElemento (listaExtra, circulo);
+            int capacidadeSegmentos = (getTamAtual (listaMuros) + getTamAtual (listaPredios) * 4 + 4);
+
+            areaBomba (x, y, capacidadeSegmentos, listaMuros, listaPredios, &vectSize, nomesvg);
 
             fscanf (nomearq, "%c", &aux); 
         }
     }
 }
+
