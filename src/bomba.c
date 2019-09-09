@@ -17,6 +17,72 @@ int cmpVertices (const void *a, const void *b)
     return 0;
 }
 
+Segmento buscarSegmentoFormadoComVertice(double xc, double yc, Vertice v, Ponto pontoMin, Ponto pontoMax) 
+{
+	double xv = getXPonto(getVVertice(v)), yv = getYPonto(getVVertice(v));
+	double a, b;
+	
+    if(xv != xc) { // reta perpendicular ver dps
+		a = (yv-yc)/(xv-xc);
+		b = yc - a*xc;
+	}
+
+	double xq, yq;
+	// y = ax + b
+	// x = (y-b)/a
+	if(xc < xv && yc > yv) { 
+		xq = (getYPonto(pontoMin) - 50 - b)/a;
+		yq = a*(getXPonto(pontoMax) + 50) + b;
+		if(distanciaEuclidiana(xc, yc, xq, getYPonto(pontoMin) - 50) > distanciaEuclidiana(xc, yc, getXPonto(pontoMax) + 50, yq)) {
+			yq = getYPonto(pontoMin) - 50;
+		} else {
+			xq = getXPonto(pontoMax) + 50;
+		}
+	} else if(xc < xv && yc == yv) { // certo
+		xq = getXPonto(pontoMax) + 50;
+		yq = yc;
+	} else if(xc < xv && yc < yv) {
+		xq = (yc + 50 - b)/a;
+		yq = a*(getXPonto(pontoMax) + 50) + b;
+		if(distanciaEuclidiana(xc, yc, xq, yc + 50) > distanciaEuclidiana(xc, yc, getXPonto(pontoMax) + 50, yq)) {
+			yq = yc + 50;
+		} else {
+			xq = getXPonto(pontoMax) + 50;
+		}
+	} else if(xc > xv && yc > yv) {
+		xq = (getXPonto(pontoMin) - 50 - b)/a;
+		yq = a*(getXPonto(pontoMin) - 50) + b;
+		if(distanciaEuclidiana(xc, yc, xq, getYPonto(pontoMin) - 50) > distanciaEuclidiana(xc, yc, getXPonto(pontoMin) - 50, yq)) {
+			yq = getYPonto(pontoMin) - 50;
+		} else {
+			xq = getXPonto(pontoMin) - 50;
+		}
+	} else if(xc > xv && yc == yv) { // certo
+		xq = getXPonto(pontoMin) - 50;
+		yq = yc;
+	} else if(xc > xv && yc < yv) {
+		xq = (getYPonto(pontoMax) + 50 - b)/a;
+		yq = a*(getXPonto(pontoMin) - 50) + b;
+		if(distanciaEuclidiana(xc, yc, xq, getYPonto(pontoMax) + 50) > distanciaEuclidiana(xc, yc, getXPonto(pontoMin) - 50, yq)) {
+			yq = getYPonto(pontoMax) + 50;
+		} else {
+			xq = getXPonto(pontoMin) - 50;
+		}
+	} else if(xc == xv && yc > yv) { // certo
+		xq = xc;
+		yq = getYPonto(pontoMin) - 50;
+	} else if(xc == xv && yc < yv) { // certo
+		xq = xc;
+		yq = getYPonto(pontoMax) + 50;
+	}
+
+	// ver como vou dar free dps
+    Vertice vc = createVertex(createPoint(xc, yc), xc, yc);
+    Vertice vq = createVertex(createPoint(xq, yq), xc, yc);
+
+	return criaSegmento(vc, vq);
+}
+
 void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista listaPredios, int *size, FILE * arqSVG){
     Segmento *segmentos = (Segmento *) malloc (capacidade * sizeof (Segmento));
 
@@ -211,6 +277,88 @@ void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista list
     int tamanhoVertices = index;
     qsort (vertices, tamanhoVertices, sizeof (Vertice), cmpVertices);
     Lista segmentosAtivos = iniciaLista ((int) tamanhoVertices / 2);
+    Vertice biombo = criaVertice(criaPonto(getxPOnto(getVVertice(vertices[0])), getYPonto(getVVertice(vertices[0]))), x, y);
+    setSegmentoVertice (biombo, getSegmentoVertice (vertices[0]));
+
+    for (int i = 0; i < tamanhoVertices; i++){
+        Vertice v = vertices[i];
+        Segmento sv = getSegmentoVertice (v);
+        Segmento s_v = buscarSegmentoFormadoComVertice (x, y, v, pMin, pMax);
+        Segmento segmentoFechado = NULL;
+
+        double dMin = __INT_MAX__;
+
+        for (int j = getPrimeiro (segmentosAtivos); j != getNulo (); j = getProximo (segmentosAtivos, i)){
+            Segmento s = getElemento (segmentosAtivos, j);
+
+            if (s == sv) continue;
+
+            if (checkInterseccaoSegmentos (s_v, s)){
+                double xInter, yInter;
+                interseccaoSegmentos (s_v, s, &xInter, &yInter);
+
+                double distBombaInter = distanciaEuclidiana (x, y, xInter, yInter);
+                if (distBombaInter < dMin){
+                    dMin = distBombaInter;
+                    segmentoFechado = s;
+                }
+            }
+        }
+
+        if (getStartVertice (v)){
+            bool ehSegmentoFechado;
+
+            if (distanciaEuclidiana (x, y, getxPOnto (getVVertice (v)), getYPonto (getVVertice (v))) < dMin)
+                ehSegmentoFechado = true;
+            else
+                ehSegmentoFechado = false;
+            
+            if (ehSegmentoFechado){
+                double biomboInterX, biomboInterY;
+
+                interseccaoSegmentos (s_v, getSegmentoVertice (biombo), &biomboInterX, &biomboInterY);
+                Vertice vInter = criaVertice (criaPonto (biomboInterX, biomboInterY), x, y);
+                Segmento s1 = criaSegmento (biombo, vInter);
+                Segmento s2 = criaSegmento (vInter, v);
+
+                svgprintTriangulo (x, y, biombo, vInter, arqSVG);
+
+                biombo = v;
+            } 
+            inserirElemento (segmentosAtivos, sv);  
+        }
+        else {
+            bool ehSegmentoFechado;
+
+            if (distanciaEuclidiana (x, y, getXPonto (getVVertice (v)), getYPonto (getVVertice(v))) <=dMin)
+                ehSegmentoFechado = true;
+            else
+                ehSegmentoFechado = false;
+
+            if (ehSegmentoFechado) {
+                if (segmentoFechado != NULL){
+                    double biomboInterX, biomboInterY;
+                    interseccaoSegmentos (s_v, segmentoFechado, &biomboInterX, &biomboInterY);
+                    Vertice vInter = criaVertice (criaPonto (biomboInterX, biomboInterY), x, y);
+
+                    Segmento s1 = criaSegmento (biombo, v);
+                    Segmento s2 = criaSegmento (v, vInter);
+
+                    svgprintTriangulo (x, y, v, vInter, arqSVG);
+                    svgprintTriangulo (x, y, biombo, v, arqSVG);
+
+                    biombo = vInter;
+                    setSegmentoVertice (biombo, segmentoFechado);
+                }
+                else{
+                    Segmento s = criaSegmento (biombo, v);
+                    svgprintTriangulo (x, y, biombo, v, arqSVG);
+                    biombo = v;
+                }
+            }
+            excluirElementoMemoria (segmentosAtivos, sv);
+        }
+    }
 
     for (int i = 0; i < tamanhoSegmentos; i++){
         Muro m = criaMuro (getXPonto (getVVertice (getV1Segmento((Segmento) segmentos[i]))), getYPonto (getVVertice (getV1Segmento ((Segmento) segmentos[i]))), getXPonto (getVVertice (getV2Segmento((Segmento) segmentos[i]))), getYPonto (getVVertice (getV2Segmento ((Segmento) segmentos[i]))));

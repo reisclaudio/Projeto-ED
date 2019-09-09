@@ -48,6 +48,8 @@ void imprimeListaSVG (Lista lista, FILE* arqSVG);
 void desalocarLista (Lista lista, void (*destruirElemento)(Elemento elemento));
 /* Funcao que retorna -1 (NULO) */
 int getNulo();
+bool excluirElementoMemoria(Lista lista, Elemento elemento);
+
 
 
 #endif

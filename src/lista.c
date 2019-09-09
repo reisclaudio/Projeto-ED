@@ -162,6 +162,32 @@ void excluirElemento (Lista lista, char* id)
     free (aux->v[index].elemento);
 }
 
+bool excluirElementoMemoria(Lista lista, Elemento elemento) {
+    ListaImp l = (ListaImp) lista;
+    for(int i = l->inicio; i != -1; i = l->v[i].prox) {
+        if(l->v[i].elemento== elemento) {
+            if(i == l->inicio) {
+                l->inicio = l->v[i].prox;
+                if(l->v[i].prox == -1) {
+                    l->v[l->v[i].ant].prox = -1;
+                    l->fim = l->v[i].ant;
+                }
+            } else if(l->v[i].prox == -1) {
+                l->v[l->v[i].ant].prox = -1;
+                l->fim = l->v[i].ant;
+            } else {
+                l->v[l->v[i].ant].prox = l->v[i].prox;
+                l->v[l->v[i].prox].ant = l->v[i].ant;
+            }
+            l->tamAtual--;
+            l->v[i].prox = l->livre;
+            l->livre = i;
+            return true;
+        }
+    }
+    return false;
+}
+
 Elemento getElemento (Lista lista, int i)
 {
     ListaImp aux = (ListaImp) lista;

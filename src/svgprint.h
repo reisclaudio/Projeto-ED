@@ -43,6 +43,8 @@ void svgprintMuro (Muro muro, FILE * arqSVG);
 void svgprintCircleLine (Forma forma, FILE * arqSVG);
 /* Funcao que printa a bomba de radiacao luminosa no .svg */
 void svgprintBomba (double x, double y, FILE * arqSVG);
+void svgprintTriangulo(double x1, double y1, Vertice v2, Vertice v3, FILE * arqSVG);
+
 
 
 

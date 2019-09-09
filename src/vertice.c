@@ -48,6 +48,15 @@ bool getStartVertice (Vertice vertice)
     return v->start;
 }
 
+Segmento getSegmentoVertice(Vertice vertice)
+{
+    VerticeImp v; 
+    v = (VerticeImp) vertice;
+
+    return v->s;
+}
+
+
 void setSegmentoVertice (Vertice vertice, Segmento segmento)
 {
     VerticeImp v;

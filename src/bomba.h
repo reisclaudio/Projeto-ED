@@ -18,6 +18,9 @@ typedef void *Ponto;
 
 /* Funcao que realiza a consulta "brl" do .qry */
 void areaBomba (double x, double y, int capacidade, Lista listaMuros, Lista listaPredios, int *size, FILE * arqSVG);
+Segmento buscarSegmentoFormadoComVertice(double xc, double yc, Vertice v, Ponto pontoMin, Ponto pontoMax);
+int cmpVertices (const void *a, const void *b);
+
 
 
 #endif
