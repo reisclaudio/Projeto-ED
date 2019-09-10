@@ -56,7 +56,6 @@ Segmento getSegmentoVertice(Vertice vertice)
     return v->s;
 }
 
-
 void setSegmentoVertice (Vertice vertice, Segmento segmento)
 {
     VerticeImp v;

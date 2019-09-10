@@ -32,7 +32,7 @@ double getYPonto (Ponto ponto)
 void setPontoMin (Ponto ponto, double x, double y)
 {
     PontoImp p;
-    p = (PontoImp) p;
+    p = (PontoImp) ponto;
 
     if (x < p->x) p->x = x;
     if (y < p->y) p->y = y;
@@ -41,7 +41,7 @@ void setPontoMin (Ponto ponto, double x, double y)
 void setPontoMax (Ponto ponto, double x, double y)
 {
     PontoImp p;
-    p = (PontoImp) p;
+    p = (PontoImp) ponto;
 
     if (x > p->x) p->x = x;
     if (y > p->y) p->y = y;
@@ -52,4 +52,14 @@ void freePonto (Ponto ponto)
     PontoImp p;
     p = (PontoImp) ponto;
     free (p);
+}
+
+void setXPonto(Ponto p, double x) {
+    PontoImp ponto = (PontoImp) p;
+    ponto->x = x;
+}
+
+void setYPonto(Ponto p, double y) {
+    PontoImp ponto = (PontoImp) p;
+    ponto->y = y;
 }

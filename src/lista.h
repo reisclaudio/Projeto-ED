@@ -26,8 +26,11 @@ void inserirElemento (Lista lista, Elemento elemento);
 void inserirAntes (Lista lista, Elemento elemento, int posic);
 /* Funcao que insere um elemento na proxima posicao de posic */
 void inserirDepois (Lista lista, Elemento elemento, int posic);
+
 /* Funcao que exclue o elemento da lista com o id/cep passado */
 void excluirElemento (Lista lista, char* id);
+bool excluirElementoMemoria(Lista lista, Elemento elemento);
+
 /* Funcao que retorna o elemento da posicao i da lista */
 Elemento getElemento (Lista lista, int i);
 /* Funcao que retorna o elemento da lista com o id/cep passado */
@@ -48,7 +51,6 @@ void imprimeListaSVG (Lista lista, FILE* arqSVG);
 void desalocarLista (Lista lista, void (*destruirElemento)(Elemento elemento));
 /* Funcao que retorna -1 (NULO) */
 int getNulo();
-bool excluirElementoMemoria(Lista lista, Elemento elemento);
 
 
 

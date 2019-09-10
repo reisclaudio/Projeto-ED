@@ -18,7 +18,9 @@ double getYPonto (Ponto ponto);
 /* Funcoes que fazem o set dos elementos de uma ponto */
 void setPontoMin (Ponto ponto, double x, double y);
 void setPontoMax (Ponto ponto, double x, double y);
-
+void setXPonto(Ponto p, double x);
+void setYPonto(Ponto p, double y);
+ 
 /* Funcao que da o free em um ponto */
 void freePonto (Ponto ponto);
 
